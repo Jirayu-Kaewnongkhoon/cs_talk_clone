@@ -20,9 +20,9 @@ class _PostListState extends State<PostList> {
         itemCount: postList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            // onTap: () {
-            //   Navigator.pushNamed(context, '/detail', arguments: postList[index]);
-            // },
+            onTap: () {
+              Navigator.pushNamed(context, '/detail', arguments: postList[index]);
+            },
             child: PostItem(
               post: postList[index],
             ),

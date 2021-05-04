@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cstalk_clone/models/comment.dart';
 import 'package:cstalk_clone/models/post.dart';
 
 class DatabaseService {
@@ -6,8 +7,9 @@ class DatabaseService {
   final CollectionReference collection = FirebaseFirestore.instance.collection('posts');
 
   String uid;
+  String postID;
 
-  DatabaseService({ this.uid });
+  DatabaseService({ this.uid, this.postID });
 
   Future createPost(String postDetail) async {
     return await collection.add({
@@ -31,5 +33,33 @@ class DatabaseService {
       .orderBy('timestamp', descending: true)
       .snapshots()
       .map(_postsFromSnapshot);
+  }
+
+  Future createComment(String postID, String commentDetail) async {
+    return await collection.doc(postID).collection('comments').add({
+      'postID': postID,
+      'commentDetail': commentDetail,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    }).then((doc) => doc.update({
+      'commentID': doc.id,
+    }));
+  }
+
+  List<Comment> _commentsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) => Comment(
+      postID: doc.data()['postID'],
+      commentID: doc.data()['commentID'],
+      commentDetail: doc.data()['commentDetail'],
+      timestamp: doc.data()['timestamp'],
+    )).toList();
+  }
+
+  Stream<List<Comment>> get comments {
+    return collection
+      .doc(postID)
+      .collection('comments')
+      .orderBy('timestamp', descending: true)
+      .snapshots()
+      .map(_commentsFromSnapshot);
   }
 }

@@ -2,22 +2,14 @@ import 'package:cstalk_clone/models/post.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class PostItem extends StatefulWidget {
+class PostItem extends StatelessWidget {
 
   final Post post;
 
   PostItem({ this.post });
 
-  @override
-  _PostItemState createState() => _PostItemState();
-}
-
-class _PostItemState extends State<PostItem> {
-
-  bool commentClick = false;
-
   String _getDateTime() {
-    return DateFormat.yMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(widget.post.timestamp));
+    return DateFormat.yMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(post.timestamp));
   }
 
   @override
@@ -42,7 +34,7 @@ class _PostItemState extends State<PostItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                Text(widget.post.postDetail),
+                Text(post.postDetail),
 
                 SizedBox(height: 8.0),
 
@@ -55,27 +47,20 @@ class _PostItemState extends State<PostItem> {
           Row(
             children: [
               Expanded(
-                child: FlatButton(
-                  child: Icon(
-                    Icons.comment,
-                    color: Colors.grey[400],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
+                  child: FlatButton(
+                    child: Icon(
+                      Icons.comment,
+                      color: Colors.grey[400],
+                    ),
+                    onPressed: () {
+                      // Navigator.pushNamed(context, '/detail', arguments: widget.post);
+                    }
                   ),
-                  onPressed: () {
-                    setState(() {
-                      commentClick = true;
-                    });
-                    // Navigator.pushNamed(context, '/detail', arguments: widget.post);
-                  }
                 ),
               ),
             ],
-          ),
-
-          Visibility(
-            visible: commentClick,
-            child: Form(
-              child: TextFormField(),
-            ),
           ),
 
         ],
