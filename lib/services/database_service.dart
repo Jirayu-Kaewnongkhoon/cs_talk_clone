@@ -8,8 +8,9 @@ class DatabaseService {
 
   String uid;
   String postID;
+  String commentID;
 
-  DatabaseService({ this.uid, this.postID });
+  DatabaseService({ this.uid, this.postID, this.commentID });
 
   Future createPost(String postDetail) async {
     return await collection.add({
@@ -39,10 +40,22 @@ class DatabaseService {
     return await collection.doc(postID).collection('comments').add({
       'postID': postID,
       'commentDetail': commentDetail,
+      'voteCount': 0,
+      'isUpVote': false,
+      'isDownVote': false,
+      'isAccepted': false,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
       'commentID': doc.id,
     }));
+  }
+
+  Future voteComment({ int voteCount, bool isUpVote, bool isDownVote }) async {
+    return await collection.doc(postID).collection('comments').doc(commentID).update({
+      'isUpVote': isUpVote,
+      'isDownVote': isDownVote,
+      'voteCount': voteCount,
+    });
   }
 
   List<Comment> _commentsFromSnapshot(QuerySnapshot snapshot) {
@@ -50,6 +63,10 @@ class DatabaseService {
       postID: doc.data()['postID'],
       commentID: doc.data()['commentID'],
       commentDetail: doc.data()['commentDetail'],
+      voteCount: doc.data()['voteCount'],
+      isUpVote: doc.data()['isUpVote'],
+      isDownVote: doc.data()['isDownVote'],
+      isAccepted: doc.data()['isAccepted'],
       timestamp: doc.data()['timestamp'],
     )).toList();
   }
@@ -58,7 +75,7 @@ class DatabaseService {
     return collection
       .doc(postID)
       .collection('comments')
-      .orderBy('timestamp', descending: true)
+      .orderBy('voteCount', descending: true)
       .snapshots()
       .map(_commentsFromSnapshot);
   }
