@@ -13,141 +13,135 @@ class CommentItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(12.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          CircleAvatar(),
+
+          SizedBox(width: 8.0,),
+
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
               children: [
-                CircleAvatar(),
 
-                SizedBox(width: 8.0,),
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
 
-                Expanded(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Name',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Text(comment.commentDetail),
-                                  ],
-                                ),
-                              ),
-                            ),
+                    _commentSection(),
 
-                            Visibility(
-                              visible: comment.isAccepted,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 12.0),
-                                child: Icon(
-                                  Icons.check_circle,
-                                  color: Colors.greenAccent[400],
-                                  size: 30.0,
-                                ),
-                              ),
-                            )
-                          ]
-                        ),
-
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              TextButton.icon(
-                                icon: Icon(
-                                  Icons.arrow_circle_up,
-                                  color: comment.isUpVote ? Colors.greenAccent[400] : Colors.grey,
-                                ),
-                                label: Text(
-                                  'Up',
-                                  style: TextStyle(
-                                    color: comment.isUpVote ? Colors.greenAccent[400] : Colors.grey,
-                                    fontWeight: comment.isUpVote ? FontWeight.bold : null,
-                                  ),
-                                ), 
-                                onPressed: () async {
-                                  if (!comment.isUpVote || comment.isDownVote) {
-
-                                    await DatabaseService(
-                                      postID: comment.postID,
-                                      commentID: comment.commentID
-                                    ).voteComment(
-                                      voteCount: comment.voteCount + 1,
-                                      isUpVote: true,
-                                      isDownVote: false,
-                                    );
-                                    
-                                  }
-                                },
-                              ),
-                              TextButton.icon(
-                                icon: Icon(
-                                  Icons.arrow_circle_down,
-                                  color: comment.isDownVote ? Colors.red[600] : Colors.grey,
-                                ),
-                                label: Text(
-                                  'Down',
-                                  style: TextStyle(
-                                    color: comment.isDownVote ? Colors.red[600] : Colors.grey,
-                                    fontWeight: comment.isDownVote ? FontWeight.bold : null,
-                                  ),
-                                ), 
-                                onPressed: () async {
-                                  if (!comment.isDownVote || comment.isUpVote) {
-
-                                    await DatabaseService(
-                                      postID: comment.postID,
-                                      commentID: comment.commentID
-                                    ).voteComment(
-                                      voteCount: comment.voteCount - 1,
-                                      isUpVote: false,
-                                      isDownVote: true,
-                                    );
-
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        
-                      ],
-                    ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 12.0),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: comment.isAccepted ? Colors.greenAccent[400] : Colors.transparent,
+                        size: 30.0,
+                      ),
+                    )
+                  ]
                 ),
 
-              ]
+                _voteSection(),
+                
+              ],
             ),
           ),
 
-          // Visibility(
-          //   visible: comment.isAccepted,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(left: 12.0),
-          //     child: Icon(
-          //       Icons.check_circle,
-          //       color: Colors.greenAccent[400],
-          //       size: 30.0,
-          //     ),
-          //   ),
-          // )
+        ]
+      ),
+    );
+  }
+
+  Widget _commentSection() {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            Text(
+              'Name',
+              style: TextStyle(
+                fontWeight: FontWeight.bold
+              ),
+            ),
+
+            SizedBox(height: 4.0),
+            
+            Text(comment.commentDetail),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _voteSection() {
+    return Container(
+      child: Row(
+        children: [
+          SizedBox(width: 40.0,),
+
+          TextButton.icon(
+            icon: Icon(
+              Icons.arrow_circle_up,
+              color: comment.isUpVote ? Colors.greenAccent[400] : Colors.grey,
+            ),
+            label: Text(
+              'Up',
+              style: TextStyle(
+                color: comment.isUpVote ? Colors.greenAccent[400] : Colors.grey,
+                fontWeight: comment.isUpVote ? FontWeight.bold : null,
+              ),
+            ), 
+            onPressed: () async {
+              if (!comment.isUpVote || comment.isDownVote) {
+
+                await DatabaseService(
+                  postID: comment.postID,
+                  commentID: comment.commentID
+                ).voteComment(
+                  voteCount: comment.voteCount + 1,
+                  isUpVote: true,
+                  isDownVote: false,
+                );
+                
+              }
+            },
+          ),
+          
+          SizedBox(width: 50.0,),
+
+          TextButton.icon(
+            icon: Icon(
+              Icons.arrow_circle_down,
+              color: comment.isDownVote ? Colors.red[600] : Colors.grey,
+            ),
+            label: Text(
+              'Down',
+              style: TextStyle(
+                color: comment.isDownVote ? Colors.red[600] : Colors.grey,
+                fontWeight: comment.isDownVote ? FontWeight.bold : null,
+              ),
+            ), 
+            onPressed: () async {
+              if (!comment.isDownVote || comment.isUpVote) {
+
+                await DatabaseService(
+                  postID: comment.postID,
+                  commentID: comment.commentID
+                ).voteComment(
+                  voteCount: comment.voteCount - 1,
+                  isUpVote: false,
+                  isDownVote: true,
+                );
+
+              }
+            },
+          ),
         ],
       ),
     );
