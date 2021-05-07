@@ -64,7 +64,7 @@ class CommentItem extends StatelessWidget {
           children: [
 
             Text(
-              'Name',
+              comment.ownerName,
               style: TextStyle(
                 fontWeight: FontWeight.bold
               ),

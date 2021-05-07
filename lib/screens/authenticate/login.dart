@@ -1,3 +1,5 @@
+import 'package:cstalk_clone/services/auth_service.dart';
+import 'package:cstalk_clone/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -11,11 +13,98 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  String email = '';
+  String password = '';
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Text('login'),
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(40.0),
+        child: Form(
+          child: Column(
+            children: [
+              SizedBox(height: 15.0,),
+
+              Image.asset(
+                'assets/images/app_logo.png',
+                width: 200.0,
+              ),
+              
+              SizedBox(height: 25.0,),
+
+              TextFormField(
+                decoration: textInputDecoration.copyWith(
+                  fillColor: Colors.grey[200],
+                  hintText: 'E-mail'
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    email = value;
+                  });
+                },
+              ),
+              
+              SizedBox(height: 20.0,),
+
+              TextFormField(
+                obscureText: true,
+                decoration: textInputDecoration.copyWith(
+                  fillColor: Colors.grey[200],
+                  hintText: 'Password',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 12.0
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text('Log in'),
+                      onPressed: () async {
+                        await AuthService().login(email, password);
+                      }, 
+                    ),
+                  )
+                ],
+              ),
+
+              SizedBox(height: 45.0,),
+
+              TextButton(
+                child: Text(
+                  'Don\'t have an account? Sign Up',
+                  style: TextStyle(
+                    color: Colors.orange,
+                  ),
+                ),
+                onPressed: widget.changeScreen,
+              ),
+
+            ],
+          ),
+        ),
       ),
     );
   }

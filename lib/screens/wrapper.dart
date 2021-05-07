@@ -1,21 +1,23 @@
+import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/authenticate/auth.dart';
 import 'package:cstalk_clone/screens/nav.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // UserData user = Provider.of<UserData>(context);
+    UserObject user = Provider.of<UserObject>(context);
     
-    // if (user != null) {
+    if (user != null) {
 
       return Nav();
 
-    // } else {
+    } else {
 
-      // return Auth();
+      return Auth();
 
-    // }
+    }
   }
 }

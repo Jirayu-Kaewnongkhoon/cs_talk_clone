@@ -20,7 +20,7 @@ class PostItem extends StatelessWidget {
 
           ListTile(
             leading: CircleAvatar(),
-            title: Text('Name'),
+            title: Text(post.ownerName),
             subtitle: Text(_getDateTime()),
             trailing: IconButton(
               icon: Icon(Icons.more_horiz),
