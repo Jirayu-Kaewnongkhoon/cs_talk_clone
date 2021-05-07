@@ -1,11 +1,8 @@
-import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/home/home.dart';
 import 'package:cstalk_clone/screens/notification/notification.dart';
 import 'package:cstalk_clone/screens/other/other.dart';
 import 'package:cstalk_clone/screens/post/create_post.dart';
-import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Nav extends StatefulWidget {
   @override
@@ -27,21 +24,18 @@ class _NavState extends State<Nav> {
     });
   }
 
-  void _onCreatePost(String uid) {
+  void _onCreatePost() {
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
         color: Colors.grey[200],
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-        child: CreatePost(uid: uid),
+        child: CreatePost(),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final user = Provider.of<UserObject>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('CS TALK'),
@@ -53,9 +47,7 @@ class _NavState extends State<Nav> {
         visible: _selectedScreen == 0,
         child: FloatingActionButton(
           child: Icon(Icons.create_rounded),
-          onPressed: () {
-            _onCreatePost(user.uid);
-          },
+          onPressed: _onCreatePost,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

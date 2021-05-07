@@ -1,4 +1,6 @@
 import 'package:cstalk_clone/models/comment.dart';
+import 'package:cstalk_clone/models/user.dart';
+import 'package:cstalk_clone/screens/skeleton/comment_skeleton.dart';
 import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
 
@@ -10,48 +12,64 @@ class CommentItem extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(12.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(),
+    return StreamBuilder<UserData>(
+      stream: DatabaseService(uid: comment.ownerID).userData,
+      builder: (context, snapshot) {
 
-          SizedBox(width: 8.0,),
+        if (snapshot.hasData) {
 
-          Expanded(
-            child: Column(
+          UserData userData = snapshot.data;
+
+          return Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                CircleAvatar(),
 
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
+                SizedBox(width: 8.0,),
 
-                    _commentSection(),
+                Expanded(
+                  child: Column(
+                    children: [
 
-                    Padding(
-                      padding: EdgeInsets.only(left: 12.0),
-                      child: Icon(
-                        Icons.check_circle,
-                        color: comment.isAccepted ? Colors.greenAccent[400] : Colors.transparent,
-                        size: 30.0,
+                      Flex(
+                        direction: Axis.horizontal,
+                        children: [
+
+                          _commentSection(userData.name),
+
+                          Padding(
+                            padding: EdgeInsets.only(left: 12.0),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: comment.isAccepted ? Colors.greenAccent[400] : Colors.transparent,
+                              size: 30.0,
+                            ),
+                          )
+                        ]
                       ),
-                    )
-                  ]
+
+                      _voteSection(),
+                      
+                    ],
+                  ),
                 ),
 
-                _voteSection(),
-                
-              ],
+              ]
             ),
-          ),
+          );
 
-        ]
-      ),
+        } else {
+
+          return CommentSkeleton();
+          
+        }
+      }
     );
   }
 
-  Widget _commentSection() {
+  Widget _commentSection(String ownerName) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(8.0),
@@ -64,7 +82,7 @@ class CommentItem extends StatelessWidget {
           children: [
 
             Text(
-              comment.ownerName,
+              ownerName,
               style: TextStyle(
                 fontWeight: FontWeight.bold
               ),

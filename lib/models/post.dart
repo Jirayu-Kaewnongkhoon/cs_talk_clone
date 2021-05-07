@@ -2,8 +2,8 @@ class Post {
 
   String postID;
   String postDetail;
-  String ownerName;
+  String ownerID;
   int timestamp;
 
-  Post({ this.postID, this.postDetail, this.ownerName, this.timestamp });
+  Post({ this.postID, this.postDetail, this.ownerID, this.timestamp });
 }

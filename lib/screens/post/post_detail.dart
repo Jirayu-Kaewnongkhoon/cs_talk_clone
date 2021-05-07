@@ -52,55 +52,47 @@ class _PostDetailState extends State<PostDetail> {
       bottomNavigationBar: Transform.translate(
         offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
         child: BottomAppBar(
-          child: StreamBuilder<UserData>(
-            stream: DatabaseService(uid: user.uid).userData,
-            builder: (context, snapshot) {
-
-              UserData userData = snapshot.data;
-
-              return Form(
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: TextFormField(
-                    controller: _commentController,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      hintText: 'Write an answer...',
-                      fillColor: Colors.grey[200],
-                      filled: true,
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () async {
-                          await DatabaseService().createComment(post.postID, commentDetail, userData.name);
-                          _commentController.clear();
-                          FocusScope.of(context).unfocus();
-                        },
-                      ),
-                      
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(
-                          color: Colors.transparent
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(
-                          color: Colors.transparent
-                        ),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        commentDetail = value;
-                      });
+          child: Form(
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: TextFormField(
+                controller: _commentController,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                  hintText: 'Write an answer...',
+                  fillColor: Colors.grey[200],
+                  filled: true,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () async {
+                      await DatabaseService().createComment(post.postID, commentDetail, user.uid);
+                      _commentController.clear();
+                      FocusScope.of(context).unfocus();
                     },
                   ),
+                  
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                      color: Colors.transparent
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                      color: Colors.transparent
+                    ),
+                  ),
                 ),
-              );
-            }
-          ),
+                onChanged: (value) {
+                  setState(() {
+                    commentDetail = value;
+                  });
+                },
+              ),
+            ),
+          )
         ),
       ),
     );

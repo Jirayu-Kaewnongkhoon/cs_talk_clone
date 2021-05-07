@@ -36,10 +36,10 @@ class DatabaseService {
       .map(_userDataFromSnapShot);
   }
 
-  Future createPost(String postDetail, String ownerName) async {
+  Future createPost(String postDetail, String ownerID) async {
     return await collection.add({
       'postDetail': postDetail,
-      'ownerName': ownerName,
+      'ownerID': ownerID,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
       'postID': doc.id,
@@ -50,7 +50,7 @@ class DatabaseService {
     return snapshot.docs.map((doc) => Post(
       postID: doc.data()['postID'],
       postDetail: doc.data()['postDetail'],
-      ownerName: doc.data()['ownerName'],
+      ownerID: doc.data()['ownerID'],
       timestamp: doc.data()['timestamp'],
     )).toList();
   }
@@ -62,11 +62,11 @@ class DatabaseService {
       .map(_postsFromSnapshot);
   }
 
-  Future createComment(String postID, String commentDetail, String ownerName) async {
+  Future createComment(String postID, String commentDetail, String ownerID) async {
     return await collection.doc(postID).collection('comments').add({
       'postID': postID,
       'commentDetail': commentDetail,
-      'ownerName': ownerName,
+      'ownerID': ownerID,
       'voteCount': 0,
       'isUpVote': false,
       'isDownVote': false,
@@ -90,7 +90,7 @@ class DatabaseService {
       postID: doc.data()['postID'],
       commentID: doc.data()['commentID'],
       commentDetail: doc.data()['commentDetail'],
-      ownerName: doc.data()['ownerName'],
+      ownerID: doc.data()['ownerID'],
       voteCount: doc.data()['voteCount'],
       isUpVote: doc.data()['isUpVote'],
       isDownVote: doc.data()['isDownVote'],
