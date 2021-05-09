@@ -26,6 +26,18 @@ class _PostDetailState extends State<PostDetail> {
     super.dispose();
   }
 
+  _onCreateComment(String uid) async {
+
+    await DatabaseService(
+      uid: uid,
+      postID: post.postID,
+    ).createComment(commentDetail);
+
+    _commentController.clear();
+
+    FocusScope.of(context).unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -65,10 +77,8 @@ class _PostDetailState extends State<PostDetail> {
                   filled: true,
                   suffixIcon: IconButton(
                     icon: Icon(Icons.send),
-                    onPressed: () async {
-                      await DatabaseService().createComment(post.postID, commentDetail, user.uid);
-                      _commentController.clear();
-                      FocusScope.of(context).unfocus();
+                    onPressed: () {
+                      _onCreateComment(user.uid);
                     },
                   ),
                   

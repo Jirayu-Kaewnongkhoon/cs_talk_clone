@@ -13,7 +13,7 @@ class _CreatePostState extends State<CreatePost> {
   String postDetail = '';
 
   void _onCreatePost(String ownerID) async {
-    await DatabaseService().createPost(postDetail, ownerID);
+    await DatabaseService(uid: ownerID).createPost(postDetail);
     Navigator.pop(context);
   }
   

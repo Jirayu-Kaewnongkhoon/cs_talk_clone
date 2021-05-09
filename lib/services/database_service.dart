@@ -13,7 +13,7 @@ class DatabaseService {
 
   DatabaseService({ this.uid, this.postID, this.commentID });
 
-  Future updateUserData(String uid, String name) async {
+  Future updateUserData(String name) async {
     return await FirebaseFirestore.instance.collection('users')
       .doc(uid)
       .set({
@@ -36,10 +36,10 @@ class DatabaseService {
       .map(_userDataFromSnapShot);
   }
 
-  Future createPost(String postDetail, String ownerID) async {
+  Future createPost(String postDetail) async {
     return await collection.add({
       'postDetail': postDetail,
-      'ownerID': ownerID,
+      'ownerID': uid,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
       'postID': doc.id,
@@ -62,14 +62,14 @@ class DatabaseService {
       .map(_postsFromSnapshot);
   }
 
-  Future createComment(String postID, String commentDetail, String ownerID) async {
+  Future createComment(String commentDetail) async {
     return await collection.doc(postID).collection('comments').add({
       'postID': postID,
       'commentDetail': commentDetail,
-      'ownerID': ownerID,
+      'ownerID': uid,
       'voteCount': 0,
-      'isUpVote': false,
-      'isDownVote': false,
+      'upVoteList': <String>[],
+      'downVoteList': <String>[],
       'isAccepted': false,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
@@ -77,12 +77,16 @@ class DatabaseService {
     }));
   }
 
-  Future voteComment({ int voteCount, bool isUpVote, bool isDownVote }) async {
-    return await collection.doc(postID).collection('comments').doc(commentID).update({
-      'isUpVote': isUpVote,
-      'isDownVote': isDownVote,
-      'voteCount': voteCount,
-    });
+  Future voteComment({ List<String> upVoteList, List<String> downVoteList }) async {
+    return await collection
+      .doc(postID)
+      .collection('comments')
+      .doc(commentID)
+      .update({
+        'upVoteList': upVoteList,
+        'downVoteList': downVoteList,
+        'voteCount': upVoteList.length - downVoteList.length,
+      });
   }
 
   List<Comment> _commentsFromSnapshot(QuerySnapshot snapshot) {
@@ -92,8 +96,8 @@ class DatabaseService {
       commentDetail: doc.data()['commentDetail'],
       ownerID: doc.data()['ownerID'],
       voteCount: doc.data()['voteCount'],
-      isUpVote: doc.data()['isUpVote'],
-      isDownVote: doc.data()['isDownVote'],
+      upVoteList: List.from(doc.data()['upVoteList']),
+      downVoteList: List.from(doc.data()['downVoteList']),
       isAccepted: doc.data()['isAccepted'],
       timestamp: doc.data()['timestamp'],
     )).toList();

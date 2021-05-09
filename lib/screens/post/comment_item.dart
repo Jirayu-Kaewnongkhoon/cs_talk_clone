@@ -3,15 +3,63 @@ import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/skeleton/comment_skeleton.dart';
 import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CommentItem extends StatelessWidget {
 
   final Comment comment;
 
   CommentItem({ this.comment });
+
+  _upVote(String uid) async {
+
+    if (!comment.upVoteList.contains(uid)) {
+
+      comment.upVoteList.add(uid);
+      comment.downVoteList.remove(uid);
+
+    } else {
+
+      comment.upVoteList.remove(uid);
+    }
+
+    await DatabaseService(
+      postID: comment.postID,
+      commentID: comment.commentID
+    ).voteComment(
+      upVoteList: comment.upVoteList,
+      downVoteList: comment.downVoteList,
+    );
+    
+  }
+
+  _downVote(String uid) async {
+
+    if (!comment.downVoteList.contains(uid)) {
+
+      comment.downVoteList.add(uid);
+      comment.upVoteList.remove(uid);
+
+    } else {
+
+      comment.downVoteList.remove(uid);
+    }
+
+    await DatabaseService(
+      postID: comment.postID,
+      commentID: comment.commentID
+    ).voteComment(
+      upVoteList: comment.upVoteList,
+      downVoteList: comment.downVoteList,
+    );
+
+  }
   
   @override
   Widget build(BuildContext context) {
+
+    final uid = Provider.of<UserObject>(context).uid;
+
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: comment.ownerID).userData,
       builder: (context, snapshot) {
@@ -50,7 +98,7 @@ class CommentItem extends StatelessWidget {
                         ]
                       ),
 
-                      _voteSection(),
+                      _voteSection(uid),
                       
                     ],
                   ),
@@ -97,7 +145,7 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Widget _voteSection() {
+  Widget _voteSection(String uid) {
     return Container(
       child: Row(
         children: [
@@ -106,28 +154,17 @@ class CommentItem extends StatelessWidget {
           TextButton.icon(
             icon: Icon(
               Icons.arrow_circle_up,
-              color: comment.isUpVote ? Colors.greenAccent[400] : Colors.grey,
+              color: comment.upVoteList.contains(uid) ? Colors.greenAccent[400] : Colors.grey,
             ),
             label: Text(
               'Up',
               style: TextStyle(
-                color: comment.isUpVote ? Colors.greenAccent[400] : Colors.grey,
-                fontWeight: comment.isUpVote ? FontWeight.bold : null,
+                color: comment.upVoteList.contains(uid) ? Colors.greenAccent[400] : Colors.grey,
+                fontWeight: comment.upVoteList.contains(uid) ? FontWeight.bold : null,
               ),
             ), 
-            onPressed: () async {
-              if (!comment.isUpVote || comment.isDownVote) {
-
-                await DatabaseService(
-                  postID: comment.postID,
-                  commentID: comment.commentID
-                ).voteComment(
-                  voteCount: comment.voteCount + 1,
-                  isUpVote: true,
-                  isDownVote: false,
-                );
-                
-              }
+            onPressed: () {
+              _upVote(uid);
             },
           ),
           
@@ -136,28 +173,17 @@ class CommentItem extends StatelessWidget {
           TextButton.icon(
             icon: Icon(
               Icons.arrow_circle_down,
-              color: comment.isDownVote ? Colors.red[600] : Colors.grey,
+              color: comment.downVoteList.contains(uid) ? Colors.red[600] : Colors.grey,
             ),
             label: Text(
               'Down',
               style: TextStyle(
-                color: comment.isDownVote ? Colors.red[600] : Colors.grey,
-                fontWeight: comment.isDownVote ? FontWeight.bold : null,
+                color: comment.downVoteList.contains(uid) ? Colors.red[600] : Colors.grey,
+                fontWeight: comment.downVoteList.contains(uid) ? FontWeight.bold : null,
               ),
             ), 
-            onPressed: () async {
-              if (!comment.isDownVote || comment.isUpVote) {
-
-                await DatabaseService(
-                  postID: comment.postID,
-                  commentID: comment.commentID
-                ).voteComment(
-                  voteCount: comment.voteCount - 1,
-                  isUpVote: false,
-                  isDownVote: true,
-                );
-
-              }
+            onPressed: () {
+              _downVote(uid);
             },
           ),
         ],
