@@ -51,6 +51,7 @@ class DatabaseService {
       postID: doc.data()['postID'],
       postDetail: doc.data()['postDetail'],
       ownerID: doc.data()['ownerID'],
+      acceptedCommentID: doc.data()['acceptedCommentID'],
       timestamp: doc.data()['timestamp'],
     )).toList();
   }
@@ -86,6 +87,24 @@ class DatabaseService {
         'upVoteList': upVoteList,
         'downVoteList': downVoteList,
         'voteCount': upVoteList.length - downVoteList.length,
+      });
+  }
+
+  // Future acceptComment(bool isAccepted) async {
+  //   return await collection
+  //     .doc(postID)
+  //     .collection('comments')
+  //     .doc(commentID)
+  //     .update({
+  //       'isAccepted': isAccepted,
+  //     });
+  // }
+
+  Future addAcceptedComment() async {
+    return await collection
+      .doc(postID)
+      .update({
+        'acceptedCommentID': commentID,
       });
   }
 

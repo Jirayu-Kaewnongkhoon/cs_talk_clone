@@ -56,7 +56,7 @@ class _PostDetailState extends State<PostDetail> {
             
             StreamProvider<List<Comment>>.value(
               value: DatabaseService(postID: post.postID).comments,
-              child: CommentList()
+              child: CommentList(postOwnerID: post.ownerID),
             ),
           ],
         ),

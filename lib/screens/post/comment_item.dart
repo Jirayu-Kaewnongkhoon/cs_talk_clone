@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cstalk_clone/models/comment.dart';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/skeleton/comment_skeleton.dart';
@@ -8,10 +9,11 @@ import 'package:provider/provider.dart';
 class CommentItem extends StatelessWidget {
 
   final Comment comment;
+  final String postOwnerID;
 
-  CommentItem({ this.comment });
+  CommentItem({ this.comment, this.postOwnerID });
 
-  _upVote(String uid) async {
+  _onUpVote(String uid) async {
 
     if (!comment.upVoteList.contains(uid)) {
 
@@ -33,7 +35,7 @@ class CommentItem extends StatelessWidget {
     
   }
 
-  _downVote(String uid) async {
+  _onDownVote(String uid) async {
 
     if (!comment.downVoteList.contains(uid)) {
 
@@ -54,6 +56,23 @@ class CommentItem extends StatelessWidget {
     );
 
   }
+
+  _onAcceptComment(bool isAccepted) async {
+
+    String commentID = '';
+
+    if (!isAccepted) {
+      
+      commentID = comment.commentID;
+
+    } 
+
+    await DatabaseService(
+      postID: comment.postID,
+      commentID: commentID,
+    ).addAcceptedComment();
+
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -69,39 +88,62 @@ class CommentItem extends StatelessWidget {
           UserData userData = snapshot.data;
 
           return Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(),
 
-                SizedBox(width: 8.0,),
-
-                Expanded(
+                Flexible(
+                  flex: 5,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
 
-                      Flex(
-                        direction: Axis.horizontal,
-                        children: [
+                      _commentSection(userData.name),
 
-                          _commentSection(userData.name),
+                      SizedBox(height: 4.0,),
 
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: Icon(
-                              Icons.check_circle,
-                              color: comment.isAccepted ? Colors.greenAccent[400] : Colors.transparent,
-                              size: 30.0,
-                            ),
-                          )
-                        ]
-                      ),
-
-                      _voteSection(uid),
+                      _acceptCommentSection(uid),
                       
                     ],
                   ),
+                ),
+
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Center(
+                    child: Column(
+                      children: [
+
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_drop_up, 
+                            size: 30.0,
+                            color: comment.upVoteList.contains(uid) ? Colors.black : Colors.grey,
+                          ), 
+                          onPressed: () {
+                            _onUpVote(uid);
+                          }
+                        ),
+
+                        Text(comment.voteCount.toString()),
+
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_drop_down, 
+                            size: 30.0,
+                            color: comment.downVoteList.contains(uid) ? Colors.black : Colors.grey,
+                          ), 
+                          onPressed: () {
+                            _onDownVote(uid);
+                          }
+                        ),
+                        
+                      ],
+                    ),
+                  )
                 ),
 
               ]
@@ -118,76 +160,116 @@ class CommentItem extends StatelessWidget {
   }
 
   Widget _commentSection(String ownerName) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            Text(
-              ownerName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12.0),
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-            SizedBox(height: 4.0),
-            
-            Text(comment.commentDetail),
-          ],
+                Text(
+                  ownerName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+
+                SizedBox(height: 4.0),
+                
+                Text(comment.commentDetail),
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
-  Widget _voteSection(String uid) {
-    return Container(
-      child: Row(
-        children: [
-          SizedBox(width: 40.0,),
+  Widget _acceptCommentSection(String uid) {
+    return StreamBuilder<String>(
+      stream: FirebaseFirestore.instance.collection('posts').doc(comment.postID).snapshots().map((doc) => doc.data()['acceptedCommentID']),
+      builder: (context, snapshot) {
 
-          TextButton.icon(
-            icon: Icon(
-              Icons.arrow_circle_up,
-              color: comment.upVoteList.contains(uid) ? Colors.greenAccent[400] : Colors.grey,
-            ),
-            label: Text(
-              'Up',
-              style: TextStyle(
-                color: comment.upVoteList.contains(uid) ? Colors.greenAccent[400] : Colors.grey,
-                fontWeight: comment.upVoteList.contains(uid) ? FontWeight.bold : null,
-              ),
-            ), 
-            onPressed: () {
-              _upVote(uid);
-            },
-          ),
-          
-          SizedBox(width: 50.0,),
+        String acceptedCommentID = snapshot.data;
 
-          TextButton.icon(
-            icon: Icon(
-              Icons.arrow_circle_down,
-              color: comment.downVoteList.contains(uid) ? Colors.red[600] : Colors.grey,
-            ),
-            label: Text(
-              'Down',
-              style: TextStyle(
-                color: comment.downVoteList.contains(uid) ? Colors.red[600] : Colors.grey,
-                fontWeight: comment.downVoteList.contains(uid) ? FontWeight.bold : null,
-              ),
-            ), 
-            onPressed: () {
-              _downVote(uid);
-            },
-          ),
-        ],
-      ),
+        if (uid == postOwnerID) {
+
+          return _ownerWidget(acceptedCommentID);
+
+        } else {
+
+          return _visitorWidget(acceptedCommentID);
+
+        }
+      }
     );
+  }
+
+  Widget _ownerWidget(String acceptedCommentID) {
+
+    if (acceptedCommentID == comment.commentID) {
+
+      return OutlinedButton.icon(
+        icon: Icon(
+          Icons.check_circle, 
+          color: Colors.greenAccent[400],
+        ), 
+        label: Text('Unaccept Answer'), 
+        onPressed: () {
+          _onAcceptComment(true);
+        },
+      );
+
+    } else {
+
+      return OutlinedButton(
+        child: Text('Accept Answer'), 
+        onPressed: () {
+          _onAcceptComment(false);
+        },
+      );
+
+    }
+
+  }
+
+  Widget _visitorWidget(String acceptedCommentID) {
+    
+    if (acceptedCommentID == comment.commentID) {
+
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.check_circle, 
+                    color: Colors.greenAccent[400],
+                  ),
+                ),
+                TextSpan(
+                  text: ' Accepted Answer',
+                  style: TextStyle(color: Colors.black)
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+    } else {
+
+      return Container();
+
+    }
   }
 }
