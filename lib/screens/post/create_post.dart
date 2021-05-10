@@ -22,64 +22,67 @@ class _CreatePostState extends State<CreatePost> {
 
     final user = Provider.of<UserObject>(context);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Form(
-          child: TextFormField(
-            decoration: InputDecoration(
-              hintText: 'Have any question ?',
-              fillColor: Colors.white,
-              filled: true,
+    return Form(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Have any question ?',
+                fillColor: Colors.white,
+                filled: true,
 
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.transparent
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.transparent
+                  ),
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent
+              maxLines: 7,
+              onChanged: (value) {
+                setState(() {
+                  postDetail = value;
+                });
+              },
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: FlatButton.icon(
+                    onPressed: () {}, 
+                    icon: Icon(Icons.add_photo_alternate), 
+                    label: Text('Upload Image'),
+                    color: Colors.orange[300],
+                  ),
                 ),
-              ),
+              ],
             ),
-            maxLines: 7,
-            onChanged: (value) {
-              setState(() {
-                postDetail = value;
-              });
-            },
-          ),
-        ),
 
-        Row(
-          children: [
-            Expanded(
-              child: FlatButton.icon(
-                onPressed: () {}, 
-                icon: Icon(Icons.add_photo_alternate), 
-                label: Text('Upload Image'),
-                color: Colors.orange[300],
-              ),
-            ),
+            Row(
+              children: [
+                Expanded(
+                  child: FlatButton.icon(
+                    onPressed: postDetail.length == 0 ? null : () {
+                      _onCreatePost(user.uid);
+                    }, 
+                    icon: Icon(Icons.create), 
+                    label: Text('Post'),
+                    color: Colors.orange[300],
+                  ),
+                ),
+              ],
+            )
           ],
         ),
-
-        Row(
-          children: [
-            Expanded(
-              child: FlatButton.icon(
-                onPressed: postDetail.length == 0 ? null : () {
-                  _onCreatePost(user.uid);
-                }, 
-                icon: Icon(Icons.create), 
-                label: Text('Post'),
-                color: Colors.orange[300],
-              ),
-            ),
-          ],
-        )
-      ],
+      ),
     );
   }
 }

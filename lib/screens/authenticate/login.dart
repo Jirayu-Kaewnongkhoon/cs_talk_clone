@@ -23,86 +23,91 @@ class _LoginState extends State<Login> {
       body: Padding(
         padding: EdgeInsets.all(40.0),
         child: Form(
-          child: Column(
-            children: [
-              SizedBox(height: 15.0,),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 15.0,),
 
-              Image.asset(
-                'assets/images/app_logo.png',
-                width: 200.0,
-              ),
-              
-              SizedBox(height: 25.0,),
-
-              TextFormField(
-                decoration: textInputDecoration.copyWith(
-                  fillColor: Colors.grey[200],
-                  hintText: 'E-mail'
+                Image.asset(
+                  'assets/images/app_logo.png',
+                  width: 200.0,
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    email = value;
-                  });
-                },
-              ),
-              
-              SizedBox(height: 20.0,),
+                
+                SizedBox(height: 25.0,),
 
-              TextFormField(
-                obscureText: true,
-                decoration: textInputDecoration.copyWith(
-                  fillColor: Colors.grey[200],
-                  hintText: 'Password',
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  decoration: textInputDecoration.copyWith(
+                    fillColor: Colors.grey[200],
+                    hintText: 'E-mail'
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    password = value;
-                  });
-                },
-              ),
+                
+                SizedBox(height: 20.0,),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 12.0
+                TextFormField(
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  decoration: textInputDecoration.copyWith(
+                    fillColor: Colors.grey[200],
+                    hintText: 'Password',
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      password = value;
+                    });
+                  },
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 12.0
+                        ),
                       ),
+                      onPressed: () {},
                     ),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      child: Text('Log in'),
-                      onPressed: () async {
-                        await AuthService().login(email, password);
-                      }, 
-                    ),
-                  )
-                ],
-              ),
-
-              SizedBox(height: 45.0,),
-
-              TextButton(
-                child: Text(
-                  'Don\'t have an account? Sign Up',
-                  style: TextStyle(
-                    color: Colors.orange,
-                  ),
+                  ],
                 ),
-                onPressed: widget.changeScreen,
-              ),
 
-            ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text('Log in'),
+                        onPressed: () async {
+                          await AuthService().login(email, password);
+                        }, 
+                      ),
+                    )
+                  ],
+                ),
+
+                SizedBox(height: 45.0,),
+
+                TextButton(
+                  child: Text(
+                    'Don\'t have an account? Sign Up',
+                    style: TextStyle(
+                      color: Colors.orange,
+                    ),
+                  ),
+                  onPressed: widget.changeScreen,
+                ),
+
+              ],
+            ),
           ),
         ),
       ),
