@@ -66,40 +66,60 @@ class _PostDetailState extends State<PostDetail> {
         child: BottomAppBar(
           child: Form(
             child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: TextFormField(
-                controller: _commentController,
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                  hintText: 'Write an answer...',
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () {
-                      _onCreateComment(user.uid);
-                    },
-                  ),
-                  
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide(
-                      color: Colors.transparent
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.add_photo_alternate,
+                        color: Colors.orangeAccent,
+                      ),
+                      onPressed: () {},
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide(
-                      color: Colors.transparent
+                  Flexible(
+                    flex: 6,
+                    child: TextFormField(
+                      controller: _commentController,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        hintText: 'Write an answer...',
+                        fillColor: Colors.grey[200],
+                        filled: true,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.orangeAccent,
+                          ),
+                          onPressed: () {
+                            _onCreateComment(user.uid);
+                          },
+                        ),
+                        
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                            color: Colors.transparent
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                            color: Colors.transparent
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          commentDetail = value;
+                        });
+                      },
                     ),
                   ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    commentDetail = value;
-                  });
-                },
+                ],
               ),
             ),
           )
