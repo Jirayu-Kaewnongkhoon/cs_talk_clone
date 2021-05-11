@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cstalk_clone/models/comment.dart';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/skeleton/comment_skeleton.dart';
@@ -194,20 +193,26 @@ class CommentItem extends StatelessWidget {
 
   Widget _acceptCommentSection(String uid) {
     return StreamBuilder<String>(
-      stream: FirebaseFirestore.instance.collection('posts').doc(comment.postID).snapshots().map((doc) => doc.data()['acceptedCommentID']),
+      stream: PostService(postID: comment.postID).acceptedCommentID,
       builder: (context, snapshot) {
 
-        String acceptedCommentID = snapshot.data;
+        if (snapshot.hasData) {
 
-        if (uid == postOwnerID) {
+          String acceptedCommentID = snapshot.data;
 
-          return _ownerWidget(acceptedCommentID);
+          if (uid == postOwnerID) {
 
-        } else {
+            return _ownerWidget(acceptedCommentID);
 
-          return _visitorWidget(acceptedCommentID);
+          } else {
+
+            return _visitorWidget(acceptedCommentID);
+
+          }
 
         }
+
+        return Container();
       }
     );
   }

@@ -49,6 +49,7 @@ class PostService {
     return await collection.add({
       'postDetail': postDetail,
       'ownerID': uid,
+      'acceptedCommentID': '',
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
       'postID': doc.id,
@@ -70,6 +71,13 @@ class PostService {
       .orderBy('timestamp', descending: true)
       .snapshots()
       .map(_postsFromSnapshot);
+  }
+
+  Stream<String> get acceptedCommentID {
+    return collection
+      .doc(postID)
+      .snapshots()
+      .map((doc) => doc.data()['acceptedCommentID']);
   }
 }
 
