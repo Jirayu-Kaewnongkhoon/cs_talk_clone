@@ -123,7 +123,7 @@ class CommentItem extends StatelessWidget {
                         icon: Icon(
                           Icons.arrow_drop_up, 
                           size: 30.0,
-                          color: comment.upVoteList.contains(uid) ? Colors.black : Colors.grey,
+                          color: comment.upVoteList.contains(uid) ? Colors.orangeAccent : Colors.grey,
                         ), 
                         onPressed: () {
                           _onUpVote(uid);
@@ -136,7 +136,7 @@ class CommentItem extends StatelessWidget {
                         icon: Icon(
                           Icons.arrow_drop_down, 
                           size: 30.0,
-                          color: comment.downVoteList.contains(uid) ? Colors.black : Colors.grey,
+                          color: comment.downVoteList.contains(uid) ? Colors.orangeAccent : Colors.grey,
                         ), 
                         onPressed: () {
                           _onDownVote(uid);
@@ -214,20 +214,7 @@ class CommentItem extends StatelessWidget {
 
   Widget _ownerWidget(String acceptedCommentID) {
 
-    if (acceptedCommentID == comment.commentID) {
-
-      return OutlinedButton.icon(
-        icon: Icon(
-          Icons.check_circle, 
-          color: Colors.greenAccent[400],
-        ), 
-        label: Text('Unaccept Answer'), 
-        onPressed: () {
-          _onAcceptComment(true);
-        },
-      );
-
-    } else {
+    if (acceptedCommentID.isEmpty) {
 
       return OutlinedButton(
         child: Text('Accept Answer'), 
@@ -238,13 +225,26 @@ class CommentItem extends StatelessWidget {
 
     }
 
+    return Visibility(
+      visible: acceptedCommentID == comment.commentID,
+      child: OutlinedButton.icon(
+        icon: Icon(
+          Icons.check_circle, 
+          color: Colors.greenAccent[400],
+        ), 
+        label: Text('Unaccept Answer'), 
+        onPressed: () {
+          _onAcceptComment(true);
+        },
+      ),
+    );
+
   }
 
   Widget _visitorWidget(String acceptedCommentID) {
-    
-    if (acceptedCommentID == comment.commentID) {
-
-      return Center(
+    return Visibility(
+      visible: acceptedCommentID == comment.commentID,
+      child: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 12.0),
           child: RichText(
@@ -259,18 +259,16 @@ class CommentItem extends StatelessWidget {
                 ),
                 TextSpan(
                   text: ' Accepted Answer',
-                  style: TextStyle(color: Colors.black)
+                  style: TextStyle(
+                    color: Colors.orangeAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
           ),
         ),
-      );
-
-    } else {
-
-      return Container();
-
-    }
+      ),
+    );
   }
 }
