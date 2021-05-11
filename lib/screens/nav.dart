@@ -25,13 +25,17 @@ class _NavState extends State<Nav> {
   }
 
   void _onCreatePost() {
-    showModalBottomSheet(context: context, builder: (context) {
-      return Container(
-        color: Colors.grey[200],
-        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-        child: CreatePost(),
-      );
-    });
+    showModalBottomSheet(
+      isScrollControlled: FocusScope.of(context).hasFocus, 
+      context: context, 
+      builder: (context) {
+        return Container(
+          color: Colors.grey[200],
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
+          child: CreatePost(),
+        );
+      }
+    );
   }
 
   @override

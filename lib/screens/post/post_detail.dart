@@ -28,7 +28,7 @@ class _PostDetailState extends State<PostDetail> {
 
   _onCreateComment(String uid) async {
 
-    await DatabaseService(
+    await CommentService(
       uid: uid,
       postID: post.postID,
     ).createComment(commentDetail);
@@ -55,7 +55,7 @@ class _PostDetailState extends State<PostDetail> {
             SizedBox(height: 4.0),
             
             StreamProvider<List<Comment>>.value(
-              value: DatabaseService(postID: post.postID).comments,
+              value: CommentService(postID: post.postID).comments,
               child: CommentList(postOwnerID: post.ownerID),
             ),
           ],

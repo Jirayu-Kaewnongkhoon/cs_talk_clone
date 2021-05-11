@@ -18,7 +18,7 @@ class PostItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: post.ownerID).userData,
+      stream: UserService(uid: post.ownerID).userData,
       builder: (context, snapshot) {
 
         if (snapshot.hasData) {

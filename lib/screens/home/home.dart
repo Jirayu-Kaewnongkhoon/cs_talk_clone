@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Post>>.value(
-      value: DatabaseService().posts,
+      value: PostService().posts,
       child: Container(
         child: PostList(),
       ),

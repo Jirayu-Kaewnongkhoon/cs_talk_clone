@@ -25,7 +25,7 @@ class CommentItem extends StatelessWidget {
       comment.upVoteList.remove(uid);
     }
 
-    await DatabaseService(
+    await CommentService(
       postID: comment.postID,
       commentID: comment.commentID
     ).voteComment(
@@ -47,7 +47,7 @@ class CommentItem extends StatelessWidget {
       comment.downVoteList.remove(uid);
     }
 
-    await DatabaseService(
+    await CommentService(
       postID: comment.postID,
       commentID: comment.commentID
     ).voteComment(
@@ -67,7 +67,7 @@ class CommentItem extends StatelessWidget {
 
     } 
 
-    await DatabaseService(
+    await CommentService(
       postID: comment.postID,
       commentID: commentID,
     ).addAcceptedComment();
@@ -80,7 +80,7 @@ class CommentItem extends StatelessWidget {
     final uid = Provider.of<UserObject>(context).uid;
 
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: comment.ownerID).userData,
+      stream: UserService(uid: comment.ownerID).userData,
       builder: (context, snapshot) {
 
         if (snapshot.hasData) {
@@ -96,53 +96,54 @@ class CommentItem extends StatelessWidget {
 
                 Flexible(
                   flex: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
 
-                      _commentSection(userData.name),
+                        _commentSection(userData.name),
 
-                      SizedBox(height: 4.0,),
+                        SizedBox(height: 4.0,),
 
-                      _acceptCommentSection(uid),
-                      
-                    ],
+                        _acceptCommentSection(uid),
+                        
+                      ],
+                    ),
                   ),
                 ),
 
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
-                  child: Center(
-                    child: Column(
-                      children: [
+                  child: Column(
+                    children: [
 
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_drop_up, 
-                            size: 30.0,
-                            color: comment.upVoteList.contains(uid) ? Colors.black : Colors.grey,
-                          ), 
-                          onPressed: () {
-                            _onUpVote(uid);
-                          }
-                        ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_drop_up, 
+                          size: 30.0,
+                          color: comment.upVoteList.contains(uid) ? Colors.black : Colors.grey,
+                        ), 
+                        onPressed: () {
+                          _onUpVote(uid);
+                        }
+                      ),
 
-                        Text(comment.voteCount.toString()),
+                      Text(comment.voteCount.toString()),
 
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_drop_down, 
-                            size: 30.0,
-                            color: comment.downVoteList.contains(uid) ? Colors.black : Colors.grey,
-                          ), 
-                          onPressed: () {
-                            _onDownVote(uid);
-                          }
-                        ),
-                        
-                      ],
-                    ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_drop_down, 
+                          size: 30.0,
+                          color: comment.downVoteList.contains(uid) ? Colors.black : Colors.grey,
+                        ), 
+                        onPressed: () {
+                          _onDownVote(uid);
+                        }
+                      ),
+                      
+                    ],
                   )
                 ),
 

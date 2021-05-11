@@ -3,15 +3,13 @@ import 'package:cstalk_clone/models/comment.dart';
 import 'package:cstalk_clone/models/post.dart';
 import 'package:cstalk_clone/models/user.dart';
 
-class DatabaseService {
+class UserService {
 
-  final CollectionReference collection = FirebaseFirestore.instance.collection('posts');
+  final CollectionReference collection = FirebaseFirestore.instance.collection('users');
 
   String uid;
-  String postID;
-  String commentID;
 
-  DatabaseService({ this.uid, this.postID, this.commentID });
+  UserService({ this.uid });
 
   Future updateUserData(String name) async {
     return await FirebaseFirestore.instance.collection('users')
@@ -35,6 +33,17 @@ class DatabaseService {
       .snapshots()
       .map(_userDataFromSnapShot);
   }
+}
+
+class PostService {
+
+  final CollectionReference collection = FirebaseFirestore.instance.collection('posts');
+
+  String uid;
+  String postID;
+  String commentID;
+
+  PostService({ this.uid, this.postID, this.commentID });
 
   Future createPost(String postDetail) async {
     return await collection.add({
@@ -62,6 +71,17 @@ class DatabaseService {
       .snapshots()
       .map(_postsFromSnapshot);
   }
+}
+
+class CommentService {
+
+  final CollectionReference collection = FirebaseFirestore.instance.collection('posts');
+
+  String uid;
+  String postID;
+  String commentID;
+
+  CommentService({ this.uid, this.postID, this.commentID });
 
   Future createComment(String commentDetail) async {
     return await collection.doc(postID).collection('comments').add({

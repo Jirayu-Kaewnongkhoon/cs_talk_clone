@@ -17,7 +17,7 @@ class _ProfileState extends State<Profile> {
     final user = Provider.of<UserObject>(context);
 
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user.uid).userData,
+      stream: UserService(uid: user.uid).userData,
       builder: (context, snapshot) {
 
         if (snapshot.hasData) {
