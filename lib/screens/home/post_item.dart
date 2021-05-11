@@ -12,7 +12,7 @@ class PostItem extends StatelessWidget {
   PostItem({ this.post });
 
   String _getDateTime() {
-    return DateFormat.yMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(post.timestamp));
+    return DateFormat('d/MM/y')/* .yMd() */.add_jms().format(DateTime.fromMillisecondsSinceEpoch(post.timestamp));
   }
 
   @override
