@@ -12,7 +12,7 @@ class PostItem extends StatelessWidget {
   PostItem({ this.post });
 
   String _getDateTime() {
-    return DateFormat('d/MM/y')/* .yMd() */.add_jms().format(DateTime.fromMillisecondsSinceEpoch(post.timestamp));
+    return DateFormat('d/MM/y').add_jms().format(DateTime.fromMillisecondsSinceEpoch(post.timestamp));
   }
 
   @override
@@ -49,7 +49,7 @@ class PostItem extends StatelessWidget {
 
                       SizedBox(height: 8.0),
 
-                      Image.network('https://scontent.fbkk22-3.fna.fbcdn.net/v/t1.6435-9/178794282_327468622075185_374490667859464477_n.jpg?_nc_cat=103&ccb=1-3&_nc_sid=730e14&_nc_ohc=BnLbXcMMttkAX880EvP&_nc_ht=scontent.fbkk22-3.fna&oh=9d4457ebf1ebebc1508033b9f0e9c5ed&oe=60B11ABB'),
+                      post.imageUrl != null ? Image.network(post.imageUrl) : Container(),
 
                     ],
                   ),

@@ -183,6 +183,10 @@ class CommentItem extends StatelessWidget {
                 SizedBox(height: 4.0),
                 
                 Text(comment.commentDetail),
+
+                SizedBox(height: 4.0),
+
+                comment.imageUrl != null ? Image.network(comment.imageUrl) : Container(),
               ],
             ),
           ),

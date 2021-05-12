@@ -45,9 +45,10 @@ class PostService {
 
   PostService({ this.uid, this.postID, this.commentID });
 
-  Future createPost(String postDetail) async {
+  Future createPost(String postDetail, String imageUrl) async {
     return await collection.add({
       'postDetail': postDetail,
+      'imageUrl': imageUrl,
       'ownerID': uid,
       'acceptedCommentID': '',
       'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -60,6 +61,7 @@ class PostService {
     return snapshot.docs.map((doc) => Post(
       postID: doc.data()['postID'],
       postDetail: doc.data()['postDetail'],
+      imageUrl: doc.data()['imageUrl'],
       ownerID: doc.data()['ownerID'],
       acceptedCommentID: doc.data()['acceptedCommentID'],
       timestamp: doc.data()['timestamp'],
@@ -91,10 +93,11 @@ class CommentService {
 
   CommentService({ this.uid, this.postID, this.commentID });
 
-  Future createComment(String commentDetail) async {
+  Future createComment({ String commentDetail, String imageUrl }) async {
     return await collection.doc(postID).collection('comments').add({
       'postID': postID,
       'commentDetail': commentDetail,
+      'imageUrl': imageUrl,
       'ownerID': uid,
       'voteCount': 0,
       'upVoteList': <String>[],
@@ -118,16 +121,6 @@ class CommentService {
       });
   }
 
-  // Future acceptComment(bool isAccepted) async {
-  //   return await collection
-  //     .doc(postID)
-  //     .collection('comments')
-  //     .doc(commentID)
-  //     .update({
-  //       'isAccepted': isAccepted,
-  //     });
-  // }
-
   Future addAcceptedComment() async {
     return await collection
       .doc(postID)
@@ -141,6 +134,7 @@ class CommentService {
       postID: doc.data()['postID'],
       commentID: doc.data()['commentID'],
       commentDetail: doc.data()['commentDetail'],
+      imageUrl: doc.data()['imageUrl'],
       ownerID: doc.data()['ownerID'],
       voteCount: doc.data()['voteCount'],
       upVoteList: List.from(doc.data()['upVoteList']),

@@ -16,19 +16,33 @@ class _PostListState extends State<PostList> {
 
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-      child: ListView.builder(
-        itemCount: postList.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/detail', arguments: postList[index]);
-            },
-            child: PostItem(
-              post: postList[index],
-            ),
-          );
-        },
+      child: SingleChildScrollView(
+        child: Column(
+          children: postList
+            .map((post) => GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/detail', arguments: post);
+              },
+              child: PostItem(
+                post: post,
+              ),
+            )
+          ).toList(),
+        ),
       ),
+      // child: ListView.builder(
+      //   itemCount: postList.length,
+      //   itemBuilder: (context, index) {
+      //     return GestureDetector(
+      //       onTap: () {
+      //         Navigator.pushNamed(context, '/detail', arguments: postList[index]);
+      //       },
+      //       child: PostItem(
+      //         post: postList[index],
+      //       ),
+      //     );
+      //   },
+      // ),
     );
   }
 }

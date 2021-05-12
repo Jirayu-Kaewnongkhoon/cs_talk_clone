@@ -3,6 +3,7 @@ class Comment {
   String postID;
   String commentID;
   String commentDetail;
+  String imageUrl;
   String ownerID;
   int voteCount;
   List<String> upVoteList;
@@ -14,6 +15,7 @@ class Comment {
     this.postID, 
     this.commentID, 
     this.commentDetail,
+    this.imageUrl,
     this.ownerID, 
     this.voteCount,
     this.upVoteList,

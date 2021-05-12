@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:cstalk_clone/models/comment.dart';
 import 'package:cstalk_clone/models/post.dart';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/home/post_item.dart';
 import 'package:cstalk_clone/screens/post/comment_list.dart';
 import 'package:cstalk_clone/services/database_service.dart';
+import 'package:cstalk_clone/services/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class PostDetail extends StatefulWidget {
@@ -16,7 +20,8 @@ class _PostDetailState extends State<PostDetail> {
 
   Post post;
 
-  String commentDetail = '';
+  String _commentDetail = '';
+  File _image;
 
   final _commentController = TextEditingController();
 
@@ -28,14 +33,50 @@ class _PostDetailState extends State<PostDetail> {
 
   _onCreateComment(String uid) async {
 
-    await CommentService(
-      uid: uid,
-      postID: post.postID,
-    ).createComment(commentDetail);
+    if (_image != null) {
+
+      String imageUrl = await StorageService().uploadImage(_image);
+      
+      await CommentService(
+        uid: uid,
+        postID: post.postID,
+      ).createComment(
+        commentDetail: _commentDetail, 
+        imageUrl: imageUrl
+      );
+
+    } else {
+
+      await CommentService(
+        uid: uid,
+        postID: post.postID,
+      ).createComment(commentDetail: _commentDetail);
+    }
 
     _commentController.clear();
+    _clearImage();
 
     FocusScope.of(context).unfocus();
+  }
+
+  Future _getImage() async {
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  _clearImage() {
+    _image = null;
+  }
+
+  bool _isValid() {
+    return _commentDetail.isNotEmpty || _image != null;
   }
 
   @override
@@ -76,7 +117,7 @@ class _PostDetailState extends State<PostDetail> {
                         Icons.add_photo_alternate,
                         color: Colors.orangeAccent,
                       ),
-                      onPressed: () {},
+                      onPressed: _getImage,
                     ),
                   ),
                   Flexible(
@@ -94,7 +135,7 @@ class _PostDetailState extends State<PostDetail> {
                             Icons.send,
                             color: Colors.orangeAccent,
                           ),
-                          onPressed: () {
+                          onPressed: !_isValid() ? null : () {
                             _onCreateComment(user.uid);
                           },
                         ),
@@ -114,7 +155,7 @@ class _PostDetailState extends State<PostDetail> {
                       ),
                       onChanged: (value) {
                         setState(() {
-                          commentDetail = value;
+                          _commentDetail = value;
                         });
                       },
                     ),
