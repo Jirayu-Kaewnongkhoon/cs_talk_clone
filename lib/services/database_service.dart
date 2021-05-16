@@ -45,9 +45,10 @@ class PostService {
 
   PostService({ this.uid, this.postID, this.commentID });
 
-  Future createPost(String postDetail, String imageUrl) async {
+  Future createPost(String postDetail, List<String> tags, String imageUrl) async {
     return await collection.add({
       'postDetail': postDetail,
+      'tags': tags,
       'imageUrl': imageUrl,
       'ownerID': uid,
       'acceptedCommentID': '',
@@ -61,6 +62,7 @@ class PostService {
     return snapshot.docs.map((doc) => Post(
       postID: doc.data()['postID'],
       postDetail: doc.data()['postDetail'],
+      tags: List<String>.from(doc.data()['tags']),
       imageUrl: doc.data()['imageUrl'],
       ownerID: doc.data()['ownerID'],
       acceptedCommentID: doc.data()['acceptedCommentID'],

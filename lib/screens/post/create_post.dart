@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/services/database_service.dart';
 import 'package:cstalk_clone/services/storage_service.dart';
+import 'package:cstalk_clone/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,18 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
 
   String _postDetail = '';
+  List<String> _tags = [];
+  bool _isAddClick = false;
+  bool _isFirstAddClick = false;
   File _image;
+
+  final _tagController = TextEditingController();
+
+  @override
+  void dispose() {
+    _tagController.dispose();
+    super.dispose();
+  }
 
   _onCreatePost(String ownerID) async {
 
@@ -23,14 +35,13 @@ class _CreatePostState extends State<CreatePost> {
 
       String imageUrl = await StorageService().uploadImage(_image);
 
-      await PostService(uid: ownerID).createPost(_postDetail, imageUrl);
+      await PostService(uid: ownerID).createPost(_postDetail, _tags, imageUrl);
 
     } else {
 
-      await PostService(uid: ownerID).createPost(_postDetail, null);
+      await PostService(uid: ownerID).createPost(_postDetail, _tags, null);
     }
     
-
     _clearImage();
 
     Navigator.pop(context);
@@ -55,6 +66,15 @@ class _CreatePostState extends State<CreatePost> {
       }
     });
   }
+
+  _onEnter(String tag) {
+    setState(() {
+      _tags.add(tag);
+      _isAddClick = false;
+    });
+
+    _tagController.clear();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -64,7 +84,7 @@ class _CreatePostState extends State<CreatePost> {
     return Form(
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             
             TextFormField(
@@ -92,56 +112,134 @@ class _CreatePostState extends State<CreatePost> {
               },
             ),
 
-            _image != null ? Stack(
-              children:[
-                Image.file(
-                  _image,
-                  width: 75.0,
-                ),
-                Positioned(
-                  left: 40.0,
-                  bottom: 40.0,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.close, 
-                      color: Colors.red,
-                    ), 
-                    onPressed: () {
-                      setState(() {
-                        _image = null;
-                      });
-                    },
-                  ),
-                )
-              ],
-            ) : Container(),
+            SizedBox(height: 4.0,),
 
-            Row(
-              children: [
-                Expanded(
-                  child: FlatButton.icon(
-                    onPressed: _getImage, 
-                    icon: Icon(Icons.add_photo_alternate), 
-                    label: Text('Upload Image'),
-                    color: Colors.orange[300],
-                  ),
-                ),
-              ],
+            Container(
+              padding: _isFirstAddClick ? EdgeInsets.all(8.0) : EdgeInsets.zero,
+              color: _isFirstAddClick ? Colors.white : Colors.transparent,
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 4.0,
+                children: _tags
+                  .map<Widget>((tag) => 
+                    Chip(
+                      backgroundColor: Colors.orange[200],
+                      label: Text(
+                        tag, 
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      deleteIcon: Icon(Icons.close),
+                      onDeleted: () {
+                        setState(() {
+                          _tags.remove(tag);
+                        });
+                      },
+                    )
+                  ).toList()
+                  ..add(
+                    !_isAddClick ? 
+                    InputChip(
+                      label: RichText(
+                        text: TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: Icon(
+                                Icons.add, 
+                                color: Colors.black,
+                              ), 
+                              alignment: PlaceholderAlignment.middle
+                            ),
+                            
+                            TextSpan(
+                              text: ' Add Tag', 
+                              style: TextStyle(color: Colors.black)
+                            ),
+
+                            if (!_isFirstAddClick) 
+                              TextSpan(
+                                text: ' (Recommend)', 
+                                style: TextStyle(
+                                  color: Colors.grey, 
+                                  fontStyle: FontStyle.italic
+                                )
+                              ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isAddClick = true;
+                          _isFirstAddClick = true;
+                        });
+                      }, 
+                    )
+                    : ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: 48.0,
+                      ),
+                      child: IntrinsicWidth(
+                        child: TextFormField(
+                          controller: _tagController,
+                          decoration: textInputDecoration.copyWith(
+                            fillColor: Colors.white,
+                            hintText: 'Tag'
+                          ),
+                          onFieldSubmitted: (tag) {
+                            if (tag.isNotEmpty) {
+                              _onEnter(tag);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+              ),
             ),
 
-            Row(
+            SizedBox(height: 4.0,),
+
+            _image != null ? Wrap(
               children: [
-                Expanded(
-                  child: FlatButton.icon(
-                    onPressed: !_isValid() ? null : () {
-                      _onCreatePost(user.uid);
-                    }, 
-                    icon: Icon(Icons.create), 
-                    label: Text('Post'),
-                    color: Colors.orange[300],
-                  ),
+                Stack(
+                  children:[
+                    Image.file(
+                      _image,
+                      width: 100.0,
+                    ),
+                    Positioned(
+                      top: -8,
+                      right: -8,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.close, 
+                          color: Colors.red,
+                        ), 
+                        onPressed: () {
+                          setState(() {
+                            _image = null;
+                          });
+                        },
+                      ),
+                    )
+                  ],
                 ),
-              ],
+              ]
+            ) : Container(),
+
+            FlatButton.icon(
+              onPressed: _getImage, 
+              icon: Icon(Icons.add_photo_alternate), 
+              label: Text('Upload Image'),
+              color: Colors.orange[300],
+            ),
+
+            FlatButton.icon(
+              onPressed: !_isValid() ? null : () {
+                _onCreatePost(user.uid);
+              }, 
+              icon: Icon(Icons.create), 
+              label: Text('Post'),
+              color: Colors.orange[300],
             )
           ],
         ),

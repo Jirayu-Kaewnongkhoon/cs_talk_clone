@@ -30,15 +30,9 @@ class _CommentListState extends State<CommentList> {
                 postOwnerID: widget.postOwnerID,
               ),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Colors.grey[200], 
-                      thickness: 2.0,
-                    )
-                  ),
-                ],
+              Divider(
+                color: Colors.grey[200], 
+                thickness: 2.0,
               ),
 
             ],

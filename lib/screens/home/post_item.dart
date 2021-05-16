@@ -27,6 +27,7 @@ class PostItem extends StatelessWidget {
 
           return Card(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
                 ListTile(
@@ -47,7 +48,7 @@ class PostItem extends StatelessWidget {
 
                       Text(post.postDetail),
 
-                      SizedBox(height: 8.0),
+                      post.imageUrl != null ? SizedBox(height: 8.0) : Container(),
 
                       post.imageUrl != null ? Image.network(post.imageUrl) : Container(),
 
@@ -55,23 +56,23 @@ class PostItem extends StatelessWidget {
                   ),
                 ),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.0),
-                        child: FlatButton(
-                          child: Icon(
-                            Icons.comment,
-                            color: Colors.grey[400],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Wrap(
+                    spacing: 4.0,
+                    children: post.tags
+                      .map((tag) => 
+                        InputChip(
+                          backgroundColor: Colors.orange[200],
+                          label: Text(
+                            tag, 
+                            style: TextStyle(color: Colors.grey[600]),
                           ),
-                          onPressed: () {
-                            // Navigator.pushNamed(context, '/detail', arguments: widget.post);
-                          }
-                        ),
-                      ),
-                    ),
-                  ],
+                          onPressed: () {},
+                        )
+                      )
+                      .toList()
+                  ),
                 ),
 
               ],
