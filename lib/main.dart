@@ -1,4 +1,5 @@
 import 'package:cstalk_clone/models/user.dart';
+import 'package:cstalk_clone/screens/home/post_filter.dart';
 import 'package:cstalk_clone/screens/nav.dart';
 import 'package:cstalk_clone/screens/post/post_detail.dart';
 import 'package:cstalk_clone/screens/wrapper.dart';
@@ -30,6 +31,7 @@ class App extends StatelessWidget {
           '/': (context) => Wrapper(),
           '/home': (context) => Nav(),
           '/detail': (context) => PostDetail(),
+          '/filter': (context) => PostFilter(),
         },
       ),
     );

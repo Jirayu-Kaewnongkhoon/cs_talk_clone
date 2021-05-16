@@ -37,16 +37,17 @@ class UserService {
 
 class PostService {
 
-  final CollectionReference collection = FirebaseFirestore.instance.collection('posts');
+  final CollectionReference _collection = FirebaseFirestore.instance.collection('posts');
 
   String uid;
   String postID;
   String commentID;
+  String tag;
 
-  PostService({ this.uid, this.postID, this.commentID });
+  PostService({ this.uid, this.postID, this.commentID, this.tag });
 
   Future createPost(String postDetail, List<String> tags, String imageUrl) async {
-    return await collection.add({
+    return await _collection.add({
       'postDetail': postDetail,
       'tags': tags,
       'imageUrl': imageUrl,
@@ -70,15 +71,23 @@ class PostService {
     )).toList();
   }
 
-  Stream<List<Post>> get posts {
-    return collection
+  Stream<List<Post>> get allPosts {
+    return _collection
+      .orderBy('timestamp', descending: true)
+      .snapshots()
+      .map(_postsFromSnapshot);
+  }
+  
+  Stream<List<Post>> get postsByTag {
+    return _collection
+      .where('tags', arrayContains: tag)
       .orderBy('timestamp', descending: true)
       .snapshots()
       .map(_postsFromSnapshot);
   }
 
   Stream<String> get acceptedCommentID {
-    return collection
+    return _collection
       .doc(postID)
       .snapshots()
       .map((doc) => doc.data()['acceptedCommentID']);

@@ -4,16 +4,11 @@ import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Post>>.value(
-      value: PostService().posts,
+      value: PostService().allPosts,
       child: Container(
         child: PostList(),
       ),

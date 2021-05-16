@@ -3,12 +3,7 @@ import 'package:cstalk_clone/screens/home/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PostList extends StatefulWidget {
-  @override
-  _PostListState createState() => _PostListState();
-}
-
-class _PostListState extends State<PostList> {
+class PostList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -30,19 +25,6 @@ class _PostListState extends State<PostList> {
           ).toList(),
         ),
       ),
-      // child: ListView.builder(
-      //   itemCount: postList.length,
-      //   itemBuilder: (context, index) {
-      //     return GestureDetector(
-      //       onTap: () {
-      //         Navigator.pushNamed(context, '/detail', arguments: postList[index]);
-      //       },
-      //       child: PostItem(
-      //         post: postList[index],
-      //       ),
-      //     );
-      //   },
-      // ),
     );
   }
 }

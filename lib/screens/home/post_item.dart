@@ -68,7 +68,9 @@ class PostItem extends StatelessWidget {
                             tag, 
                             style: TextStyle(color: Colors.grey[600]),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/filter', arguments: { 'tag': tag });
+                          },
                         )
                       )
                       .toList()
