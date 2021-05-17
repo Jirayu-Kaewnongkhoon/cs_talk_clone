@@ -2,6 +2,7 @@ import 'package:cstalk_clone/screens/home/home.dart';
 import 'package:cstalk_clone/screens/notification/notification.dart';
 import 'package:cstalk_clone/screens/other/other.dart';
 import 'package:cstalk_clone/screens/post/create_post.dart';
+import 'package:cstalk_clone/screens/search/search_post.dart';
 import 'package:flutter/material.dart';
 
 class Nav extends StatefulWidget {
@@ -38,11 +39,30 @@ class _NavState extends State<Nav> {
     );
   }
 
+  void _showSearch() {
+    showSearch(context: context, delegate: SearchPost());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CS TALK'),
+        title: Text(
+          'CS TALK',
+          style: TextStyle(
+            // color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              // color: Colors.white,
+            ), 
+            onPressed: _showSearch,
+          )
+        ],
       ),
       body: Container(
         child: screens.elementAt(_selectedScreen),
