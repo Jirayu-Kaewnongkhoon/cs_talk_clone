@@ -29,7 +29,7 @@ class _CreatePostState extends State<CreatePost> {
     super.dispose();
   }
 
-  _onCreatePost(String ownerID) async {
+  void _onCreatePost(String ownerID) async {
 
     if (_image != null) {
 
@@ -47,7 +47,7 @@ class _CreatePostState extends State<CreatePost> {
     Navigator.pop(context);
   }
 
-  _clearImage() {
+  void _clearImage() {
     _image = null;
   }
 
@@ -67,7 +67,7 @@ class _CreatePostState extends State<CreatePost> {
     });
   }
 
-  _onEnter(String tag) {
+  void _onEnter(String tag) {
     setState(() {
       _tags.add(tag);
       _isAddClick = false;

@@ -12,7 +12,7 @@ class CommentItem extends StatelessWidget {
 
   CommentItem({ this.comment, this.postOwnerID });
 
-  _onUpVote(String uid) async {
+  void _onUpVote(String uid) async {
 
     if (!comment.upVoteList.contains(uid)) {
 
@@ -34,7 +34,7 @@ class CommentItem extends StatelessWidget {
     
   }
 
-  _onDownVote(String uid) async {
+  void _onDownVote(String uid) async {
 
     if (!comment.downVoteList.contains(uid)) {
 
@@ -56,7 +56,7 @@ class CommentItem extends StatelessWidget {
 
   }
 
-  _onAcceptComment(bool isAccepted) async {
+  void _onAcceptComment(bool isAccepted) async {
 
     String commentID = '';
 

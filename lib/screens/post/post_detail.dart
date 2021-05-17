@@ -31,7 +31,7 @@ class _PostDetailState extends State<PostDetail> {
     super.dispose();
   }
 
-  _onCreateComment(String uid) async {
+  void _onCreateComment(String uid) async {
 
     if (_image != null) {
 
@@ -71,7 +71,7 @@ class _PostDetailState extends State<PostDetail> {
     });
   }
 
-  _clearImage() {
+  void _clearImage() {
     _image = null;
   }
 
