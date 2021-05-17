@@ -6,6 +6,26 @@ import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 class SearchPost extends SearchDelegate<String> {
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    
+    final ThemeData theme = Theme.of(context);
+    
+    return theme.copyWith(
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: Colors.white,
+        selectionColor: Colors.blue[300],
+      ),
+      appBarTheme: AppBarTheme(
+        textTheme: theme.textTheme,
+      ),
+      inputDecorationTheme: searchFieldDecorationTheme ??
+        InputDecorationTheme(
+          border: InputBorder.none,
+        ),
+    );
+  }
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
