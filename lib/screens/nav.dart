@@ -65,6 +65,7 @@ class _NavState extends State<Nav> {
         ],
       ),
       body: Container(
+        color: Colors.grey[100],
         child: screens.elementAt(_selectedScreen),
       ),
       floatingActionButton: Visibility(

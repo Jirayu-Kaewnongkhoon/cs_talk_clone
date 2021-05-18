@@ -55,7 +55,7 @@ class _CreatePostState extends State<CreatePost> {
     return _postDetail.isNotEmpty || _image != null;
   }
 
-  Future _getImage() async {
+  Future<void> _getImage() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
     setState(() {

@@ -86,6 +86,14 @@ class PostService {
       .map(_postsFromSnapshot);
   }
 
+  Stream<List<Post>> get postsByUser {
+    return _collection
+      .where('ownerID', isEqualTo: uid)
+      .orderBy('timestamp', descending: true)
+      .snapshots()
+      .map(_postsFromSnapshot);
+  }
+
   Stream<String> get acceptedCommentID {
     return _collection
       .doc(postID)
