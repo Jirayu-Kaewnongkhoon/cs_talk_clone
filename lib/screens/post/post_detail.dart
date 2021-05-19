@@ -102,6 +102,40 @@ class _PostDetailState extends State<PostDetail> {
           ],
         ),
       ),
+      bottomSheet: _image != null ? Container(
+        height: 80.0,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.grey[200],
+        child: Center(
+          child: Wrap(
+            children: [
+              Stack(
+                children:[
+                  Image.file(
+                    _image,
+                    width: 70.0,
+                  ),
+                  Positioned(
+                    top: -8,
+                    right: -8,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close, 
+                        color: Colors.red,
+                      ), 
+                      onPressed: () {
+                        setState(() {
+                          _image = null;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ]
+          ),
+        ),
+      ) : Container(width: 0,),
       bottomNavigationBar: Transform.translate(
         offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
         child: BottomAppBar(
