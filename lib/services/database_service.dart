@@ -11,12 +11,13 @@ class UserService {
 
   UserService({ this.uid });
 
-  Future updateUserData(String name) async {
+  Future updateUserData({ String name, String imageUrl }) async {
     return await FirebaseFirestore.instance.collection('users')
       .doc(uid)
-      .set({
+      .update({
         'uid': uid,
         'name': name,
+        'imageUrl': imageUrl,
       });
   }
 
@@ -24,6 +25,7 @@ class UserService {
     return UserData(
       uid: snapshot.data()['uid'],
       name: snapshot.data()['name'],
+      imageUrl: snapshot.data()['imageUrl'],
     );
   }
 

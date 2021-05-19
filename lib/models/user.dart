@@ -10,7 +10,8 @@ class UserData {
 
   String uid;
   String name;
+  String imageUrl;
   
-  UserData({ this.uid, this.name });
+  UserData({ this.uid, this.name, this.imageUrl });
   
 }
