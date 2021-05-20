@@ -8,7 +8,6 @@ class Comment {
   int voteCount;
   List<String> upVoteList;
   List<String> downVoteList;
-  bool isAccepted;
   int timestamp;
 
   Comment({ 
@@ -20,7 +19,6 @@ class Comment {
     this.voteCount,
     this.upVoteList,
     this.downVoteList, 
-    this.isAccepted, 
     this.timestamp 
   });
 }

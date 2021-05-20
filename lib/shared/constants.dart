@@ -16,3 +16,19 @@ const textInputDecoration = InputDecoration(
   ),
 
 );
+
+const postInputDecoration = InputDecoration(
+  fillColor: Colors.white,
+  filled: true,
+
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Colors.transparent
+    ),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Colors.transparent
+    ),
+  ),
+);

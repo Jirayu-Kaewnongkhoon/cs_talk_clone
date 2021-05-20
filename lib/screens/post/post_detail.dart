@@ -72,7 +72,9 @@ class _PostDetailState extends State<PostDetail> {
   }
 
   void _clearImage() {
-    _image = null;
+    setState(() {
+      _image = null;
+    });
   }
 
   bool _isValid() {
@@ -88,7 +90,7 @@ class _PostDetailState extends State<PostDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          post.postDetail,
+          post.postTitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -113,35 +115,26 @@ class _PostDetailState extends State<PostDetail> {
       ),
       bottomSheet: _image != null ? Container(
         height: 80.0,
+        padding: EdgeInsets.symmetric(vertical: 4.0),
         width: MediaQuery.of(context).size.width,
         color: Colors.grey[200],
         child: Center(
-          child: Wrap(
-            children: [
-              Stack(
-                children:[
-                  Image.file(
-                    _image,
-                    width: 70.0,
-                  ),
-                  Positioned(
-                    top: -8,
-                    right: -8,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.close, 
-                        color: Colors.red,
-                      ), 
-                      onPressed: () {
-                        setState(() {
-                          _image = null;
-                        });
-                      },
-                    ),
-                  )
-                ],
+          child: Stack(
+            children:[
+              Image.file(_image),
+
+              Positioned(
+                top: -8,
+                right: -8,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.close, 
+                    color: Colors.red,
+                  ), 
+                  onPressed: _clearImage,
+                ),
               ),
-            ]
+            ],
           ),
         ),
       ) : Container(width: 0,),
@@ -196,11 +189,7 @@ class _PostDetailState extends State<PostDetail> {
                           ),
                         ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          _commentDetail = value;
-                        });
-                      },
+                      onChanged: (value) => setState(() => _commentDetail = value),
                     ),
                   ),
                 ],

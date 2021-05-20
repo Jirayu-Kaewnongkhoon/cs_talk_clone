@@ -15,6 +15,7 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
 
+  String _postTitle = '';
   String _postDetail = '';
   List<String> _tags = [];
   bool _isAddClick = false;
@@ -35,11 +36,11 @@ class _CreatePostState extends State<CreatePost> {
 
       String imageUrl = await StorageService().uploadImage(_image);
 
-      await PostService(uid: ownerID).createPost(_postDetail, _tags, imageUrl);
+      await PostService(uid: ownerID).createPost(_postTitle, _postDetail, _tags, imageUrl);
 
     } else {
 
-      await PostService(uid: ownerID).createPost(_postDetail, _tags, null);
+      await PostService(uid: ownerID).createPost(_postTitle, _postDetail, _tags, null);
     }
     
     _clearImage();
@@ -48,11 +49,13 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   void _clearImage() {
-    _image = null;
+    setState(() {
+      _image = null;
+    });
   }
 
   bool _isValid() {
-    return _postDetail.isNotEmpty || _image != null;
+    return (_postTitle.isNotEmpty && _postDetail.isNotEmpty) || _image != null;
   }
 
   Future<void> _getImage() async {
@@ -88,28 +91,21 @@ class _CreatePostState extends State<CreatePost> {
           children: [
             
             TextFormField(
-              decoration: InputDecoration(
-                hintText: 'Have any question ?',
-                fillColor: Colors.white,
-                filled: true,
+              textInputAction: TextInputAction.next,
+              decoration: postInputDecoration.copyWith(
+                hintText: 'Title'
+              ),
+              onChanged: (value) => setState(() => _postTitle = value),
+            ),
 
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.transparent
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.transparent
-                  ),
-                ),
+            SizedBox(height: 4.0,),
+            
+            TextFormField(
+              decoration: postInputDecoration.copyWith(
+                hintText: 'Description'
               ),
               maxLines: 7,
-              onChanged: (value) {
-                setState(() {
-                  _postDetail = value;
-                });
-              },
+              onChanged: (value) => setState(() => _postDetail = value),
             ),
 
             SizedBox(height: 4.0,),
@@ -198,32 +194,26 @@ class _CreatePostState extends State<CreatePost> {
 
             SizedBox(height: 4.0,),
 
-            _image != null ? Wrap(
-              children: [
-                Stack(
-                  children:[
-                    Image.file(
-                      _image,
-                      width: 100.0,
+            _image != null ? Center(
+              child: Stack(
+                children:[
+                  Image.file(
+                    _image,
+                    width: 100.0,
+                  ),
+                  Positioned(
+                    top: -8,
+                    right: -8,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close, 
+                        color: Colors.red,
+                      ), 
+                      onPressed: _clearImage,
                     ),
-                    Positioned(
-                      top: -8,
-                      right: -8,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.close, 
-                          color: Colors.red,
-                        ), 
-                        onPressed: () {
-                          setState(() {
-                            _image = null;
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ]
+                  )
+                ],
+              ),
             ) : Container(),
 
             FlatButton.icon(

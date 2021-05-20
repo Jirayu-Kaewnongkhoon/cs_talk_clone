@@ -130,7 +130,7 @@ class PostItem extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, post.tags.isEmpty ? 8.0 : 0.0),
             child: Text(
-              post.postDetail, 
+              post.postTitle, 
               style: TextStyle(
                 fontSize: 16.0,
               ),

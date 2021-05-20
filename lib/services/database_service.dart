@@ -48,8 +48,9 @@ class PostService {
 
   PostService({ this.uid, this.postID, this.commentID, this.tag });
 
-  Future createPost(String postDetail, List<String> tags, String imageUrl) async {
+  Future createPost(String postTitle, String postDetail, List<String> tags, String imageUrl) async {
     return await _collection.add({
+      'postTitle': postTitle,
       'postDetail': postDetail,
       'tags': tags,
       'imageUrl': imageUrl,
@@ -64,6 +65,7 @@ class PostService {
   List<Post> _postsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) => Post(
       postID: doc.data()['postID'],
+      postTitle: doc.data()['postTitle'],
       postDetail: doc.data()['postDetail'],
       tags: List<String>.from(doc.data()['tags']),
       imageUrl: doc.data()['imageUrl'],
@@ -123,7 +125,6 @@ class CommentService {
       'voteCount': 0,
       'upVoteList': <String>[],
       'downVoteList': <String>[],
-      'isAccepted': false,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
       'commentID': doc.id,
@@ -160,7 +161,6 @@ class CommentService {
       voteCount: doc.data()['voteCount'],
       upVoteList: List.from(doc.data()['upVoteList']),
       downVoteList: List.from(doc.data()['downVoteList']),
-      isAccepted: doc.data()['isAccepted'],
       timestamp: doc.data()['timestamp'],
     )).toList();
   }
