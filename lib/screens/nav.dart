@@ -31,6 +31,7 @@ class _NavState extends State<Nav> {
       context: context, 
       builder: (context) {
         return Container(
+          height: MediaQuery.of(context).size.height - 150.0,
           color: Colors.grey[200],
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
           child: CreatePost(),

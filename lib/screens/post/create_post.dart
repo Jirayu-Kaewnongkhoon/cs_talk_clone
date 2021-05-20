@@ -194,25 +194,26 @@ class _CreatePostState extends State<CreatePost> {
 
             SizedBox(height: 4.0,),
 
-            _image != null ? Center(
-              child: Stack(
-                children:[
-                  Image.file(
-                    _image,
-                    width: 100.0,
-                  ),
-                  Positioned(
-                    top: -8,
-                    right: -8,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.close, 
-                        color: Colors.red,
-                      ), 
-                      onPressed: _clearImage,
-                    ),
-                  )
-                ],
+            _image != null ? Container(
+              // height: 100.0,
+              child: Center(
+                child: Stack(
+                  children:[
+                    Image.file(_image),
+                    
+                    Positioned(
+                      top: -8,
+                      right: -8,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.close, 
+                          color: Colors.red,
+                        ), 
+                        onPressed: _clearImage,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ) : Container(),
 

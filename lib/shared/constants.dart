@@ -28,7 +28,7 @@ const postInputDecoration = InputDecoration(
   ),
   focusedBorder: OutlineInputBorder(
     borderSide: BorderSide(
-      color: Colors.transparent
+      color: Colors.orangeAccent
     ),
   ),
 );
