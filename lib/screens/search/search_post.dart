@@ -70,12 +70,8 @@ class SearchPost extends SearchDelegate<String> {
 
         } else if (snapshot.data.length == 0) {
 
-          return Column(
-            children: <Widget>[
-              Text(
-                "No Results Found.",
-              ),
-            ],
+          return Center(
+            child: Text("No Results Found."),
           );
 
         } else {
@@ -88,14 +84,14 @@ class SearchPost extends SearchDelegate<String> {
               
               Post post = results[index];
 
-              if (post.postDetail.toLowerCase().contains(query.toLowerCase())) {
+              if (post.postTitle.toLowerCase().contains(query.toLowerCase())) {
 
                 return ListTile(
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/detail', arguments: post);
-                    _saveRecentlySearch(post.postDetail);
+                    _saveRecentlySearch(post.postTitle);
                   },
-                  title: Text(post.postDetail),
+                  title: Text(post.postTitle),
                 );
 
               } else {
@@ -119,7 +115,7 @@ class SearchPost extends SearchDelegate<String> {
 
         if (snapshot.hasData) {
 
-          List<Post> results = snapshot.data;
+          List<Post> postList = snapshot.data;
 
           if (query.isEmpty) {
             
@@ -131,24 +127,24 @@ class SearchPost extends SearchDelegate<String> {
 
                   List<String> recentlySearch = snapshot.data;
                   
-                  return ListView.builder(
-                    itemCount: results.length,
+                  return ListView.separated(
+                    separatorBuilder: (context, index) => Divider(thickness: 1.0,),
+                    itemCount: postList.length,
                     itemBuilder: (context, index) {
                       
-                      Post post = results[index];
+                      Post post = postList[index];
 
-                      if (recentlySearch.contains(post.postDetail)) {
+                      if (recentlySearch.contains(post.postTitle)) {
                         return ListTile(
                           onTap: () {
-                            showResults(context);
                             Navigator.pushReplacementNamed(context, '/detail', arguments: post);
-                            _saveRecentlySearch(post.postDetail);
+                            _saveRecentlySearch(post.postTitle);
                           },
-                          title: Text(post.postDetail),
+                          title: Text(post.postTitle),
                           trailing: IconButton(
                             icon: Icon(Icons.close),
                             onPressed: () {
-                              _removeRecentlySearch(post.postDetail);
+                              _removeRecentlySearch(post.postTitle);
                             },
                           ),
                         );
@@ -176,20 +172,21 @@ class SearchPost extends SearchDelegate<String> {
 
           } else {
             
-            return ListView.builder(
-              itemCount: results.length,
+            return ListView.separated(
+              separatorBuilder: (context, index) => Divider(thickness: 1.0,),
+              itemCount: postList.length,
               itemBuilder: (context, index) {
                 
-                Post post = results[index];
+                Post post = postList[index];
 
-                if (post.postDetail.toLowerCase().contains(query.toLowerCase())) {
+                if (post.postTitle.toLowerCase().contains(query.toLowerCase())) {
 
                   return ListTile(
                     onTap: () {
                       Navigator.pushReplacementNamed(context, '/detail', arguments: post);
-                      _saveRecentlySearch(post.postDetail);
+                      _saveRecentlySearch(post.postTitle);
                     },
-                    title: Text(post.postDetail),
+                    title: Text(post.postTitle),
                   );
 
                 } else {
