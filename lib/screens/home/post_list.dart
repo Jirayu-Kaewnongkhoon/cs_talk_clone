@@ -20,11 +20,28 @@ class PostList extends StatelessWidget {
               },
               child: PostItem(
                 post: post,
+                isDetail: false,
               ),
             )
           ).toList(),
         ),
       ),
+      // child: ListView.builder(
+      //   itemCount: postList.length,
+      //   itemBuilder: (context, index) {
+          
+      //     Post post = postList[index];
+
+      //     return GestureDetector(
+      //       onTap: () {
+      //         Navigator.pushNamed(context, '/detail', arguments: post);
+      //       },
+      //       child: PostItem(
+      //         post: post,
+      //       ),
+      //     );
+      //   },
+      // ),
     );
   }
 }

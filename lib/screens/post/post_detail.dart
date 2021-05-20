@@ -86,12 +86,21 @@ class _PostDetailState extends State<PostDetail> {
     final user = Provider.of<UserObject>(context);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          post.postDetail,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PostItem(post: post),
+            PostItem(
+              post: post,
+              isDetail: true,
+            ),
 
             SizedBox(height: 4.0),
             
