@@ -73,7 +73,7 @@ class _CreatePostState extends State<CreatePost> {
     _clearImage();
 
     // ส่ง postTitle กลับไป เพื่อให้ class PostDetail เอาไปอัปเดต app title
-    Navigator.pop(context, {'postTitle': widget.post.postTitle});
+    Navigator.pop(context, {'postTitle': widget.post?.postTitle ?? null});
   }
 
   Future<void> _createPost(String ownerID) async {

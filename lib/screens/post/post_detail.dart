@@ -94,8 +94,6 @@ class _PostDetailState extends State<PostDetail> {
     post = ModalRoute.of(context).settings.arguments;
     final user = Provider.of<UserObject>(context);
 
-    print('build => ${post.postTitle}');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
