@@ -5,6 +5,7 @@ import 'package:cstalk_clone/screens/skeleton/post_skeleton.dart';
 import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 enum PostAction { edit, remove }
 
@@ -104,6 +105,9 @@ class PostItem extends StatelessWidget {
   }
 
   Widget _detailWidget(BuildContext context, UserData userData) {
+
+    final uid = Provider.of<UserObject>(context).uid;
+
     return StreamBuilder<Post>(
       stream: PostService(postID: post.postID).postByID,
       builder: (context, snapshot) {
@@ -121,7 +125,7 @@ class PostItem extends StatelessWidget {
                   leading: CircleAvatar(),
                   title: Text(userData.name),
                   subtitle: Text(_getDateTime(post.timestamp)),
-                  trailing: _popupMenu(context, post),
+                  trailing: uid != post.ownerID ? null : _popupMenu(context, post),
                 ),
 
                 Padding(
