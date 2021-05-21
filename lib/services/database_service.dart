@@ -5,14 +5,14 @@ import 'package:cstalk_clone/models/user.dart';
 
 class UserService {
 
-  final CollectionReference collection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _collection = FirebaseFirestore.instance.collection('users');
 
   String uid;
 
   UserService({ this.uid });
 
   Future updateUserData({ String name, String imageUrl }) async {
-    return await FirebaseFirestore.instance.collection('users')
+    return await _collection
       .doc(uid)
       .update({
         'uid': uid,
@@ -30,7 +30,7 @@ class UserService {
   }
 
   Stream<UserData> get userData {
-    return FirebaseFirestore.instance.collection('users')
+    return _collection
       .doc(uid)
       .snapshots()
       .map(_userDataFromSnapShot);
@@ -62,6 +62,21 @@ class PostService {
     }));
   }
 
+  Future updatePost({ String postTitle, String postDetail, String imageUrl, List<String> tags }) async {
+    return await _collection
+      .doc(postID)
+      .update({
+        'postTitle': postTitle,
+        'postDetail': postDetail,
+        'imageUrl': imageUrl,
+        'tags': tags,
+      });
+  }
+
+  Future removePost() async {
+    return await _collection.doc(postID).delete();
+  }
+
   List<Post> _postsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) => Post(
       postID: doc.data()['postID'],
@@ -75,11 +90,31 @@ class PostService {
     )).toList();
   }
 
+  Post _postFromSnapshot(DocumentSnapshot snapshot) {
+    return Post(
+      postID: snapshot.data()['postID'],
+      postTitle: snapshot.data()['postTitle'],
+      postDetail: snapshot.data()['postDetail'],
+      imageUrl: snapshot.data()['imageUrl'],
+      tags: List<String>.from(snapshot.data()['tags']),
+      ownerID: snapshot.data()['ownerID'],
+      acceptedCommentID: snapshot.data()['acceptedCommentID'],
+      timestamp: snapshot.data()['timestamp'],
+    );
+  }
+
   Stream<List<Post>> get allPosts {
     return _collection
       .orderBy('timestamp', descending: true)
       .snapshots()
       .map(_postsFromSnapshot);
+  }
+
+  Stream<Post> get postByID {
+    return _collection
+      .doc(postID)
+      .snapshots()
+      .map(_postFromSnapshot);
   }
   
   Stream<List<Post>> get postsByTag {
@@ -108,7 +143,7 @@ class PostService {
 
 class CommentService {
 
-  final CollectionReference collection = FirebaseFirestore.instance.collection('posts');
+  final CollectionReference _collection = FirebaseFirestore.instance.collection('posts');
 
   String uid;
   String postID;
@@ -117,7 +152,7 @@ class CommentService {
   CommentService({ this.uid, this.postID, this.commentID });
 
   Future createComment({ String commentDetail, String imageUrl }) async {
-    return await collection.doc(postID).collection('comments').add({
+    return await _collection.doc(postID).collection('comments').add({
       'postID': postID,
       'commentDetail': commentDetail,
       'imageUrl': imageUrl,
@@ -131,8 +166,16 @@ class CommentService {
     }));
   }
 
+  Future updateComment() async {
+    return await _collection
+      .doc(postID)
+      .update({
+        
+      });
+  }
+
   Future voteComment({ List<String> upVoteList, List<String> downVoteList }) async {
-    return await collection
+    return await _collection
       .doc(postID)
       .collection('comments')
       .doc(commentID)
@@ -144,7 +187,7 @@ class CommentService {
   }
 
   Future addAcceptedComment() async {
-    return await collection
+    return await _collection
       .doc(postID)
       .update({
         'acceptedCommentID': commentID,
@@ -166,7 +209,7 @@ class CommentService {
   }
 
   Stream<List<Comment>> get comments {
-    return collection
+    return _collection
       .doc(postID)
       .collection('comments')
       .orderBy('voteCount', descending: true)

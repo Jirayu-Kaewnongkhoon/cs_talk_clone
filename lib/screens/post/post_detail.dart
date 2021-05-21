@@ -31,6 +31,13 @@ class _PostDetailState extends State<PostDetail> {
     super.dispose();
   }
 
+  void _onDataChange(String titile) {
+    // รับค่าจาก PostItem แล้ว rebuild เพื่ออัปเดต app title
+    setState(() {
+      post.postTitle = titile;
+    });
+  }
+
   void _onCreateComment(String uid) async {
 
     if (_image != null) {
@@ -87,6 +94,8 @@ class _PostDetailState extends State<PostDetail> {
     post = ModalRoute.of(context).settings.arguments;
     final user = Provider.of<UserObject>(context);
 
+    print('build => ${post.postTitle}');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -102,6 +111,7 @@ class _PostDetailState extends State<PostDetail> {
             PostItem(
               post: post,
               isDetail: true,
+              onDataChange: _onDataChange,
             ),
 
             SizedBox(height: 4.0),

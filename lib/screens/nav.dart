@@ -27,7 +27,7 @@ class _NavState extends State<Nav> {
 
   void _onCreatePost() {
     showModalBottomSheet(
-      isScrollControlled: FocusScope.of(context).hasFocus, 
+      isScrollControlled: true, 
       context: context, 
       builder: (context) {
         return Container(
