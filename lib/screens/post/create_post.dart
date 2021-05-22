@@ -74,6 +74,25 @@ class _CreatePostState extends State<CreatePost> {
 
     // ส่ง postTitle กลับไป เพื่อให้ class PostDetail เอาไปอัปเดต app title
     Navigator.pop(context, {'postTitle': widget.post?.postTitle ?? null});
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.greenAccent[400],
+                ),
+              ),
+              TextSpan(text: ' Your question has been ' + (_isEdit ? 'updated' : 'created')),
+            ]
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _createPost(String ownerID) async {
@@ -242,7 +261,7 @@ class _CreatePostState extends State<CreatePost> {
                 _onSubmit(user.uid);
               }, 
               icon: Icon(Icons.create), 
-              label: Text('Post'),
+              label: Text(_isEdit ? 'Update' : 'Post'),
               color: Colors.orange[300],
             )
           ],

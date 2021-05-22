@@ -30,7 +30,7 @@ class PostItem extends StatelessWidget {
         break;
 
       case PostAction.remove :
-      
+        _onRemovePost(context);
         break;
     }
   }
@@ -55,6 +55,31 @@ class PostItem extends StatelessWidget {
       // เรียกใช้ callback เพื่อส่งต่อให้ class PostDetail
       onDataChange(result['postTitle']);
     }
+  }
+
+  void _onRemovePost(BuildContext context) async {
+    await PostService(postID: post.postID).removePost();
+
+    Navigator.pop(context);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.greenAccent[400],
+                ),
+              ),
+              TextSpan(text: ' Your question has been deleted'),
+            ]
+          ),
+        ),
+      ),
+    );
   }
 
   @override
