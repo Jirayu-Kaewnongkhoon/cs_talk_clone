@@ -166,12 +166,21 @@ class CommentService {
     }));
   }
 
-  Future updateComment() async {
+  Future updateComment(String commentDetail, String imageUrl) async {
     return await _collection
       .doc(postID)
       .update({
-        
+        'commentDetail': commentDetail,
+        'imageUrl': imageUrl,
       });
+  }
+
+  Future removeComment() async {
+    return await _collection
+      .doc(postID)
+      .collection('comments')
+      .doc(commentID)
+      .delete();
   }
 
   Future voteComment({ List<String> upVoteList, List<String> downVoteList }) async {

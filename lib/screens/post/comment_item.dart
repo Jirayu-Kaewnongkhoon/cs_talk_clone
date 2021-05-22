@@ -72,6 +72,38 @@ class CommentItem extends StatelessWidget {
     ).addAcceptedComment();
 
   }
+
+  void _onEditComment() {
+
+  }
+
+  void _onRemoveComment(BuildContext context) async {
+    await CommentService(
+      postID: comment.postID,
+      commentID: comment.commentID
+    ).removeComment();
+
+    Navigator.pop(context);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.greenAccent[400],
+                ),
+              ),
+              TextSpan(text: ' Your answer has deleted'),
+            ]
+          ),
+        ),
+      ),
+    );
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -101,7 +133,7 @@ class CommentItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
 
-                        _commentSection(userData.name),
+                        _commentSection(context, userData.name),
 
                         SizedBox(height: 4.0,),
 
@@ -159,35 +191,77 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Widget _commentSection(String ownerName) {
+  void _popupMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context, 
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).viewInsets.bottom + 120,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                leading: Icon(
+                  Icons.edit,
+                  color: Colors.orangeAccent,
+                ), 
+                title: Text('Edit'), 
+                onTap: _onEditComment,
+              ),
+
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                leading: Icon(
+                  Icons.delete,
+                  color: Colors.orangeAccent,
+                ), 
+                title: Text('Remove'), 
+                onTap: () => _onRemoveComment(context),
+              ),
+            ],
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _commentSection(BuildContext context, String ownerName) {
+
+    final uid = Provider.of<UserObject>(context).uid;
+
     return Row(
       children: [
         Expanded(
-          child: Container(
-            padding: EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          child: GestureDetector(
+            onLongPress: uid != comment.ownerID ? null : () => _popupMenu(context),
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                Text(
-                  ownerName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
+                  Text(
+                    ownerName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 4.0),
-                
-                Text(comment.commentDetail),
+                  SizedBox(height: 4.0),
+                  
+                  Text(comment.commentDetail),
 
-                comment.imageUrl != null ? SizedBox(height: 4.0) : Container(),
+                  comment.imageUrl != null ? SizedBox(height: 4.0) : Container(),
 
-                comment.imageUrl != null ? Image.network(comment.imageUrl) : Container(),
-              ],
+                  comment.imageUrl != null ? Image.network(comment.imageUrl) : Container(),
+                ],
+              ),
             ),
           ),
         ),
