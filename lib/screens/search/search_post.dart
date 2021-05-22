@@ -127,8 +127,7 @@ class SearchPost extends SearchDelegate<String> {
 
                   List<String> recentlySearch = snapshot.data;
                   
-                  return ListView.separated(
-                    separatorBuilder: (context, index) => Divider(thickness: 1.0,),
+                  return ListView.builder(
                     itemCount: postList.length,
                     itemBuilder: (context, index) {
                       
@@ -141,6 +140,10 @@ class SearchPost extends SearchDelegate<String> {
                             _saveRecentlySearch(post.postTitle);
                           },
                           title: Text(post.postTitle),
+                          leading: Icon(
+                            Icons.history,
+                            color: Colors.orangeAccent,
+                          ),
                           trailing: IconButton(
                             icon: Icon(Icons.close),
                             onPressed: () {
@@ -149,6 +152,7 @@ class SearchPost extends SearchDelegate<String> {
                           ),
                         );
                       } else {
+                        
                         return Container();
                       }
 
@@ -157,23 +161,14 @@ class SearchPost extends SearchDelegate<String> {
 
                 } else {
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: CircularProgressIndicator()
-                      ),
-                    ],
-                  );
+                  return Container();
                 }
               }
             );
 
           } else {
             
-            return ListView.separated(
-              separatorBuilder: (context, index) => Divider(thickness: 1.0,),
+            return ListView.builder(
               itemCount: postList.length,
               itemBuilder: (context, index) {
                 
@@ -187,6 +182,10 @@ class SearchPost extends SearchDelegate<String> {
                       _saveRecentlySearch(post.postTitle);
                     },
                     title: Text(post.postTitle),
+                    leading: Icon(
+                      Icons.question_answer,
+                      color: Colors.orangeAccent,
+                    ),
                   );
 
                 } else {
