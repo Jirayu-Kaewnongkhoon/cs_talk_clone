@@ -147,15 +147,10 @@ class _CreatePostState extends State<CreatePost> {
 
   void _clearImage() {
 
-    if (_isEdit) {
-
-      setState(() {
-        currentPost.imageUrl = null;
-      });
-
-    } 
-
     setState(() {
+      if (_isEdit) {
+        currentPost.imageUrl = null;
+      }
       _image = null;
     });
 
@@ -359,27 +354,24 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   Widget _showImage(Image image) {
-    return Container(
-      // height: 100.0,
-      child: Center(
-        child: Stack(
-          children:[
-            image,
-            
-            Positioned(
-              top: -8,
-              right: -8,
-              child: IconButton(
-                icon: Icon(
-                  Icons.close, 
-                  color: Colors.red,
-                ), 
-                onPressed: _clearImage,
-              ),
-            )
-          ],
-        ),
-      )
+    return Center(
+      child: Stack(
+        children:[
+          image,
+          
+          Positioned(
+            top: -8,
+            right: -8,
+            child: IconButton(
+              icon: Icon(
+                Icons.close, 
+                color: Colors.red,
+              ), 
+              onPressed: _clearImage,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -23,6 +23,8 @@ class _PostDetailState extends State<PostDetail> {
   String _commentDetail = '';
   File _image;
 
+  bool _isEdit = false;
+
   final _commentController = TextEditingController();
 
   @override
@@ -35,6 +37,12 @@ class _PostDetailState extends State<PostDetail> {
     // รับค่าจาก PostItem แล้ว rebuild เพื่ออัปเดต app title
     setState(() {
       post.postTitle = titile;
+    });
+  }
+
+  void _onEditComment() {
+    setState(() {
+      _isEdit = !_isEdit;
     });
   }
 
@@ -116,7 +124,10 @@ class _PostDetailState extends State<PostDetail> {
             
             StreamProvider<List<Comment>>.value(
               value: CommentService(postID: post.postID).comments,
-              child: CommentList(postOwnerID: post.ownerID),
+              child: CommentList(
+                postOwnerID: post.ownerID,
+                onEditComment: _onEditComment,
+              ),
             ),
           ],
         ),
@@ -146,7 +157,7 @@ class _PostDetailState extends State<PostDetail> {
           ),
         ),
       ) : Container(width: 0,),
-      bottomNavigationBar: Transform.translate(
+      bottomNavigationBar: _isEdit ? null : Transform.translate(
         offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
         child: BottomAppBar(
           child: Form(

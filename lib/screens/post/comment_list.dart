@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 class CommentList extends StatefulWidget {
 
   final String postOwnerID;
+  final Function onEditComment;
 
-  CommentList({ this.postOwnerID });
+  CommentList({ this.postOwnerID, this.onEditComment });
 
   @override
   _CommentListState createState() => _CommentListState();
@@ -28,6 +29,7 @@ class _CommentListState extends State<CommentList> {
               CommentItem(
                 comment: comment,
                 postOwnerID: widget.postOwnerID,
+                onEditComment: widget.onEditComment,
               ),
 
               Divider(

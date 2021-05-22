@@ -169,6 +169,8 @@ class CommentService {
   Future updateComment(String commentDetail, String imageUrl) async {
     return await _collection
       .doc(postID)
+      .collection('comments')
+      .doc(commentID)
       .update({
         'commentDetail': commentDetail,
         'imageUrl': imageUrl,

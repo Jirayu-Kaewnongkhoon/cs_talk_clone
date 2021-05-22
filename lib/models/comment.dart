@@ -21,4 +21,16 @@ class Comment {
     this.downVoteList, 
     this.timestamp 
   });
+
+  Comment clone() => Comment(
+    postID: this.postID,
+    commentID: this.commentID,
+    commentDetail: this.commentDetail,
+    imageUrl: this.imageUrl,
+    ownerID: this.ownerID,
+    voteCount: this.voteCount,
+    upVoteList: this.upVoteList,
+    downVoteList: this.downVoteList,
+    timestamp: this.timestamp,
+  );
 }
