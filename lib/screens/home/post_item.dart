@@ -233,6 +233,7 @@ class PostItem extends StatelessWidget {
               post.postTitle, 
               style: TextStyle(
                 fontSize: 16.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -261,34 +262,75 @@ class PostItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
 
+              // Expanded(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(15.0),
+              //       color: Colors.grey[100],
+              //     ),
+              //     child: ListTile(
+              //       dense: true,
+              //       title: Icon(
+              //         post.acceptedCommentID != "" ? Icons.check_circle : Icons.close,
+              //         color: post.acceptedCommentID != "" ? Colors.greenAccent[400] : Colors.red,
+              //       ),
+              //       subtitle: Center(child: Text('Accepted Answer')),
+              //     ),
+              //   ),
+              // ),
+
+              // Expanded(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(15.0),
+              //       color: Colors.grey[100],
+              //     ),
+              //     child: ListTile(
+              //       dense: true,
+              //       contentPadding: EdgeInsets.symmetric(vertical: 0.0),
+              //       title: Center(child: Text('12')),
+              //       subtitle: Center(child: Text('Answer')),
+              //     ),
+              //   ),
+              // ),
+
               Expanded(
                 child: Container(
+                  height: 50,
+                  padding: EdgeInsets.symmetric(vertical: 4.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.grey[100],
                   ),
-                  child: ListTile(
-                    dense: true,
-                    title: Icon(
-                      post.acceptedCommentID != "" ? Icons.check_circle : Icons.close,
-                      color: post.acceptedCommentID != "" ? Colors.greenAccent[400] : Colors.red,
-                    ),
-                    subtitle: Center(child: Text('Accepted Answer')),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(
+                        post.acceptedCommentID != "" ? Icons.check_circle : Icons.close,
+                        color: post.acceptedCommentID != "" ? Colors.greenAccent[400] : Colors.red,
+                      ),
+                      Center(child: Text('Accepted Answer')),
+                    ],
                   ),
                 ),
               ),
 
               Expanded(
                 child: Container(
+                  height: 50,
+                  padding: EdgeInsets.symmetric(vertical: 4.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.grey[100],
                   ),
-                  child: ListTile(
-                    dense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 0.0),
-                    title: Center(child: Text('12')),
-                    subtitle: Center(child: Text('Answer')),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(height: 1,),
+                      Center(child: Text('12', style: TextStyle(fontSize: 16,))),
+                      SizedBox(height: 1,),
+                      Center(child: Text('Total Answer')),
+                    ],
                   ),
                 ),
               ),
