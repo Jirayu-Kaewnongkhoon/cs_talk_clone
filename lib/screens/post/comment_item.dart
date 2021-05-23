@@ -246,7 +246,7 @@ class _CommentItemState extends State<CommentItem> {
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
-                  child: Column(
+                  child: uid == widget.comment.ownerID ? Container() : Column(
                     children: [
 
                       IconButton(
