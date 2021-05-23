@@ -238,7 +238,7 @@ class PostItem extends StatelessWidget {
             ),
           ),
           
-          Padding(
+          post.tags.isNotEmpty ? Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.0),
             child: Wrap(
               spacing: 4.0,
@@ -256,7 +256,7 @@ class PostItem extends StatelessWidget {
                   )
                 ).toList()
             ),
-          ),
+          ) : SizedBox(height: 25,),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
