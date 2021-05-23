@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cstalk_clone/models/comment.dart';
+import 'package:cstalk_clone/models/notification.dart';
 import 'package:cstalk_clone/models/post.dart';
 import 'package:cstalk_clone/models/user.dart';
 
@@ -226,5 +227,29 @@ class CommentService {
       .orderBy('voteCount', descending: true)
       .snapshots()
       .map(_commentsFromSnapshot);
+  }
+}
+
+class NotificationService {
+
+  CollectionReference _collection = FirebaseFirestore.instance.collection('notifications');
+
+  String uid;
+
+  NotificationService({ this.uid });
+
+  List<NotificationObject> _notificationsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) => NotificationObject(
+      notificationID: doc.data()['notificationID'],
+      postID: doc.data()['postID'],
+    )).toList();
+  }
+
+  Stream<List<NotificationObject>> get notifications {
+    return _collection
+      .doc(uid)
+      .collection('items')
+      .snapshots()
+      .map(_notificationsFromSnapshot);
   }
 }
