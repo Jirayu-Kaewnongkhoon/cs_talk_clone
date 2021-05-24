@@ -238,14 +238,15 @@ class NotificationService {
   String notificationID;
   String postID;
 
-  NotificationService({ this.uid });
+  NotificationService({ this.uid, this.notificationID, this.postID });
 
-  Future createNotificaion(String type) async {
+  Future createNotificaion(String type, String userID) async {
     return await _collection.doc(uid).collection('items').add({
       'postID': postID,
-      'userID': uid,
+      'userID': userID,
       'isActivate': false,
       'type': type,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
     }).then((doc) => doc.update({
       'notificationID': doc.id,
     }));
@@ -268,6 +269,7 @@ class NotificationService {
       userID: doc.data()['userID'],
       isActivate: doc.data()['isActivate'],
       type: doc.data()['type'],
+      timestamp: doc.data()['timestamp'],
     )).toList();
   }
 
@@ -275,6 +277,7 @@ class NotificationService {
     return _collection
       .doc(uid)
       .collection('items')
+      .orderBy('timestamp', descending: true)
       .snapshots()
       .map(_notificationsFromSnapshot);
   }

@@ -68,6 +68,11 @@ class _PostDetailState extends State<PostDetail> {
       ).createComment(commentDetail: _commentDetail);
     }
 
+    await NotificationService(
+      uid: post.ownerID,
+      postID: post.postID
+    ).createNotificaion('reply', uid);
+
     _commentController.clear();
     _clearImage();
 

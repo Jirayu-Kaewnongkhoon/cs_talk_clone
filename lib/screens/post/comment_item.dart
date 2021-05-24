@@ -62,10 +62,39 @@ class _CommentItemState extends State<CommentItem> {
 
   void _onUpVote(String uid) async {
 
+    if (uid == widget.comment.ownerID) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.info,
+                    color: Colors.grey[350],
+                  ),
+                ),
+                TextSpan(text: ' You can\'t vote for your own answer'),
+              ]
+            ),
+          ),
+        ),
+      );
+
+      return;
+    }
+
     if (!widget.comment.upVoteList.contains(uid)) {
 
       widget.comment.upVoteList.add(uid);
       widget.comment.downVoteList.remove(uid);
+      
+      await NotificationService(
+        uid: widget.comment.ownerID,
+        postID: widget.comment.postID,
+      ).createNotificaion('up', uid);
 
     } else {
 
@@ -84,10 +113,39 @@ class _CommentItemState extends State<CommentItem> {
 
   void _onDownVote(String uid) async {
 
+    if (uid == widget.comment.ownerID) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.info,
+                    color: Colors.grey[350],
+                  ),
+                ),
+                TextSpan(text: ' You can\'t vote for your own answer'),
+              ]
+            ),
+          ),
+        ),
+      );
+
+      return;
+    }
+
     if (!widget.comment.downVoteList.contains(uid)) {
 
       widget.comment.downVoteList.add(uid);
       widget.comment.upVoteList.remove(uid);
+
+      await NotificationService(
+        uid: widget.comment.ownerID,
+        postID: widget.comment.postID,
+      ).createNotificaion('down', uid);
 
     } else {
 
@@ -104,13 +162,18 @@ class _CommentItemState extends State<CommentItem> {
 
   }
 
-  void _onAcceptComment(bool isAccepted) async {
+  void _onAcceptComment(bool isAccepted, String uid) async {
 
     String commentID = '';
 
     if (!isAccepted) {
       
       commentID = widget.comment.commentID;
+
+      await NotificationService(
+        uid: widget.comment.ownerID,
+        postID: widget.comment.postID,
+      ).createNotificaion('accept', uid);
 
     } 
 
@@ -246,7 +309,7 @@ class _CommentItemState extends State<CommentItem> {
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
-                  child: uid == widget.comment.ownerID ? Container() : Column(
+                  child: Column(
                     children: [
 
                       IconButton(
@@ -480,7 +543,7 @@ class _CommentItemState extends State<CommentItem> {
 
           if (uid == widget.postOwnerID) {
 
-            return _ownerWidget(acceptedCommentID);
+            return _ownerWidget(acceptedCommentID, uid);
 
           } else {
 
@@ -495,14 +558,14 @@ class _CommentItemState extends State<CommentItem> {
     );
   }
 
-  Widget _ownerWidget(String acceptedCommentID) {
+  Widget _ownerWidget(String acceptedCommentID, String uid) {
 
     if (acceptedCommentID.isEmpty) {
 
       return OutlinedButton(
         child: Text('Accept Answer'), 
         onPressed: () {
-          _onAcceptComment(false);
+          _onAcceptComment(false, uid);
         },
       );
 
@@ -517,7 +580,7 @@ class _CommentItemState extends State<CommentItem> {
         ), 
         label: Text('Unaccept Answer'), 
         onPressed: () {
-          _onAcceptComment(true);
+          _onAcceptComment(true, uid);
         },
       ),
     );
