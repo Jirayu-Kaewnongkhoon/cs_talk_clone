@@ -1,4 +1,7 @@
 import 'package:cstalk_clone/models/notification.dart';
+import 'package:cstalk_clone/models/post.dart';
+import 'package:cstalk_clone/models/user.dart';
+import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,26 +12,57 @@ class NotificationList extends StatelessWidget {
     final notificationList = Provider.of<List<NotificationObject>>(context) ?? [];
     
     return ListView.builder(
-      itemCount: /* notificationList.length */2,
+      itemCount: notificationList.length,
       itemBuilder: (context, index) {
         
-        // NotificationObject notification = notificationList[index];
+        NotificationObject notification = notificationList[index];
 
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.0),
-          child: ListTile(
-            leading: Icon(
-              true ? Icons.reply : Icons.check_circle,
-              color: Colors.orangeAccent,
-              size: 30.0,
+          child: Card(
+            elevation: 0.5,
+            margin: EdgeInsets.symmetric(vertical: 1.0),
+            color: !notification.isActivate ? Colors.orange[50] : Colors.white,
+            child: StreamBuilder<Post>(
+              stream: PostService(postID: notification.postID).postByID,
+              builder: (context, postSnapshot) {
+
+                return StreamBuilder<UserData>(
+                  stream: UserService(uid: notification.userID).userData,
+                  builder: (context, userSnapshot) {
+
+                    if (postSnapshot.hasData && userSnapshot.hasData) {
+
+                      Post post = postSnapshot.data;
+                      UserData userData = userSnapshot.data;
+                      
+                      return ListTile(
+                        leading: Icon(
+                          notification.type == 'reply' ? Icons.reply : Icons.check_circle,
+                          color: Colors.orangeAccent,
+                          size: 30.0,
+                        ),
+                        title: Text(userData.name, style: TextStyle(fontWeight: FontWeight.bold,)),
+                        subtitle: Text(
+                          notification.type == 'reply' 
+                          ? 'reply on your question \"${post.postTitle}\"' 
+                          : 'accepted your answer on question \"${post.postTitle}\"',
+                          maxLines: post.postTitle.length >= 20 ? 2 : 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        isThreeLine: post.postTitle.length >= 20,
+                        onTap: () {
+                          Navigator.pushNamed(context, '/detail', arguments: { 'postID': notification.postID });
+                        },
+                      );
+
+                    }
+
+                    return Container();
+                  }
+                );
+              }
             ),
-            title: Text('Name', style: TextStyle(fontWeight: FontWeight.bold,)),
-            subtitle: Text(
-              true ? 'reply on your question \"ADADADADAD\"' : 'accepted your answer on question \"ADADADADAD\"'),
-            isThreeLine: false,
-            onTap: () {
-              Navigator.pushNamed(context, '/detail', arguments: { 'postID': ''});
-            },
           ),
         );
       },

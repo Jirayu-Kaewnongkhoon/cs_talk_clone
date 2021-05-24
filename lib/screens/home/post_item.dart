@@ -18,7 +18,7 @@ class PostItem extends StatelessWidget {
   PostItem({ this.post, this.isDetail, this.onDataChange });
 
   String _getDateTime(int timestamp) {
-    return DateFormat('d/MM/y').add_jms().format(DateTime.fromMillisecondsSinceEpoch(timestamp));
+    return DateFormat('d MMMM y ').add_jms().format(DateTime.fromMillisecondsSinceEpoch(timestamp));
   }
 
   void _onPostActionClick(BuildContext context, PostAction action, Post post) {

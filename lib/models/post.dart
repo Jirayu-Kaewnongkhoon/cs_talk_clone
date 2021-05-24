@@ -9,7 +9,16 @@ class Post {
   String acceptedCommentID;
   int timestamp;
 
-  Post({ this.postID, this.postTitle, this.postDetail, this.tags, this.imageUrl, this.ownerID, this.acceptedCommentID, this.timestamp });
+  Post({
+    this.postID,
+    this.postTitle,
+    this.postDetail,
+    this.tags,
+    this.imageUrl,
+    this.ownerID,
+    this.acceptedCommentID,
+    this.timestamp
+  });
 
   Post clone() => Post(
     postID: this.postID,

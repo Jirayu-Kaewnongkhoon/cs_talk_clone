@@ -235,13 +235,39 @@ class NotificationService {
   CollectionReference _collection = FirebaseFirestore.instance.collection('notifications');
 
   String uid;
+  String notificationID;
+  String postID;
 
   NotificationService({ this.uid });
+
+  Future createNotificaion(String type) async {
+    return await _collection.doc(uid).collection('items').add({
+      'postID': postID,
+      'userID': uid,
+      'isActivate': false,
+      'type': type,
+    }).then((doc) => doc.update({
+      'notificationID': doc.id,
+    }));
+  }
+
+  Future updateNotificaionStatus() async {
+    return await _collection
+      .doc(uid)
+      .collection('items')
+      .doc(notificationID)
+      .update({
+        'isActivate': true,
+      });
+  }
 
   List<NotificationObject> _notificationsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) => NotificationObject(
       notificationID: doc.data()['notificationID'],
       postID: doc.data()['postID'],
+      userID: doc.data()['userID'],
+      isActivate: doc.data()['isActivate'],
+      type: doc.data()['type'],
     )).toList();
   }
 
