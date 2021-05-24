@@ -38,7 +38,13 @@ class NotificationList extends StatelessWidget {
                       
                       return ListTile(
                         leading: Icon(
-                          notification.type == 'reply' ? Icons.reply : Icons.check_circle,
+                          notification.type == 'reply' 
+                          ? Icons.reply 
+                          : notification.type == 'accept' 
+                          ? Icons.check_circle
+                          : notification.type == 'up' 
+                          ? Icons.arrow_circle_up
+                          : Icons.arrow_circle_down,
                           color: Colors.orangeAccent,
                           size: 30.0,
                         ),
@@ -46,11 +52,20 @@ class NotificationList extends StatelessWidget {
                         subtitle: Text(
                           notification.type == 'reply' 
                           ? 'reply on your question \"${post.postTitle}\"' 
-                          : 'accepted your answer on question \"${post.postTitle}\"',
+                          : notification.type == 'accept' 
+                          ? 'accepted your answer on question \"${post.postTitle}\"'
+                          : notification.type == 'up' 
+                          ? 'upvote your answer on question \"${post.postTitle}\"'
+                          : 'downvote your answer on question \"${post.postTitle}\"',
                           maxLines: post.postTitle.length >= 20 ? 2 : 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         isThreeLine: post.postTitle.length >= 20,
+                        trailing: notification.isActivate ? null : Icon(
+                          Icons.circle,
+                          color: Colors.orangeAccent,
+                          size: 12.0,
+                        ),
                         onTap: () {
                           Navigator.pushNamed(context, '/detail', arguments: { 'postID': notification.postID });
                         },
