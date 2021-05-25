@@ -95,7 +95,7 @@ class PostItem extends StatelessWidget {
 
         } else {
           
-          return PostSkeleton();
+          return PostSkeleton(isDetail: isDetail);
 
         }
       }
@@ -187,7 +187,7 @@ class PostItem extends StatelessWidget {
 
         } else {
 
-          return PostSkeleton();
+          return PostSkeleton(isDetail: isDetail);
         }
       }
     );

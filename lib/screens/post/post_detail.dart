@@ -224,7 +224,7 @@ class _PostDetailState extends State<PostDetail> {
             ),
           );
         }
-        // TODO : PostDetail skeleton ???
+
         return Container();
       }
     );
