@@ -228,6 +228,14 @@ class CommentService {
       .snapshots()
       .map(_commentsFromSnapshot);
   }
+
+  Stream<int> get totalComment {
+    return _collection
+      .doc(postID)
+      .collection('comments')
+      .snapshots()
+      .map((doc) => doc.size);
+  }
 }
 
 class NotificationService {

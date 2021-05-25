@@ -319,7 +319,17 @@ class PostItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(height: 1,),
-                      Center(child: Text('12', style: TextStyle(fontSize: 16,))),
+                      Center(child: StreamBuilder<int>(
+                        stream: CommentService(postID: post.postID).totalComment,
+                        builder: (context, snapshot) {
+
+                          int totalComment = 0;
+
+                          if (snapshot.hasData) totalComment = snapshot.data;
+
+                          return Text('$totalComment', style: TextStyle(fontSize: 16,));
+                        }
+                      )),
                       SizedBox(height: 1,),
                       Center(child: Text('Total Answer')),
                     ],
