@@ -10,6 +10,7 @@ class NotificationList extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final notificationList = Provider.of<List<NotificationObject>>(context) ?? [];
+    final uid = Provider.of<UserObject>(context).uid;
     
     return ListView.builder(
       itemCount: notificationList.length,
@@ -66,8 +67,12 @@ class NotificationList extends StatelessWidget {
                           color: Colors.orangeAccent,
                           size: 12.0,
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/detail', arguments: { 'postID': notification.postID });
+                        onTap: () async {
+                          Navigator.pushNamed(context, '/detail', arguments: notification.postID);
+                          await NotificationService(
+                            uid: uid,
+                            notificationID: notification.notificationID,
+                          ).updateNotificaionStatus();
                         },
                       );
 
