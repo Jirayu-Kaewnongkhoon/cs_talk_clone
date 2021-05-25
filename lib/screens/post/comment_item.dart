@@ -62,6 +62,8 @@ class _CommentItemState extends State<CommentItem> {
 
   void _onUpVote(String uid) async {
 
+    // show snackbar แจ้ง
+    // ถ้าเป็น comment ตัวเอง จะกดโหวตไม่ได้
     if (uid == widget.comment.ownerID) {
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -113,6 +115,8 @@ class _CommentItemState extends State<CommentItem> {
 
   void _onDownVote(String uid) async {
 
+    // show snackbar แจ้ง
+    // ถ้าเป็น comment ตัวเอง จะกดโหวตไม่ได้
     if (uid == widget.comment.ownerID) {
 
       ScaffoldMessenger.of(context).showSnackBar(

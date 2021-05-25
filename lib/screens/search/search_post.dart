@@ -88,7 +88,7 @@ class SearchPost extends SearchDelegate<String> {
 
                 return ListTile(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/detail', arguments: post);
+                    Navigator.pushReplacementNamed(context, '/detail', arguments: post.postID);
                     _saveRecentlySearch(post.postTitle);
                   },
                   title: Text(post.postTitle),
@@ -136,7 +136,7 @@ class SearchPost extends SearchDelegate<String> {
                       if (recentlySearch.contains(post.postTitle)) {
                         return ListTile(
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, '/detail', arguments: post);
+                            Navigator.pushReplacementNamed(context, '/detail', arguments: post.postID);
                             _saveRecentlySearch(post.postTitle);
                           },
                           title: Text(post.postTitle),
@@ -178,7 +178,7 @@ class SearchPost extends SearchDelegate<String> {
 
                   return ListTile(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, '/detail', arguments: post);
+                      Navigator.pushReplacementNamed(context, '/detail', arguments: post.postID);
                       _saveRecentlySearch(post.postTitle);
                     },
                     title: Text(post.postTitle),

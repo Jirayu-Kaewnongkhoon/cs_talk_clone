@@ -13,9 +13,8 @@ class PostItem extends StatelessWidget {
 
   final Post post;
   final bool isDetail;
-  final Function onDataChange;
 
-  PostItem({ this.post, this.isDetail, this.onDataChange });
+  PostItem({ this.post, this.isDetail });
 
   String _getDateTime(int timestamp) {
     return DateFormat('d MMMM y ').add_jms().format(DateTime.fromMillisecondsSinceEpoch(timestamp));
@@ -36,9 +35,7 @@ class PostItem extends StatelessWidget {
   }
 
   void _onEditPost(BuildContext context, Post post) async {
-
-    // รอรับค่าที่ได้จาก CreatePost เพื่อส่งต่อให้ class PostDetail เอาไปอัปเดต app title
-    dynamic result = await showModalBottomSheet(
+    showModalBottomSheet(
       isScrollControlled: true, 
       context: context, 
       builder: (context) {
@@ -50,11 +47,6 @@ class PostItem extends StatelessWidget {
         );
       }
     );
-
-    if (result != null) {
-      // เรียกใช้ callback เพื่อส่งต่อให้ class PostDetail
-      onDataChange(result['postTitle']);
-    }
   }
 
   void _onRemovePost(BuildContext context) async {

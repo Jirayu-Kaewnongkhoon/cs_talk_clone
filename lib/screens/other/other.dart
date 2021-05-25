@@ -99,6 +99,8 @@ class _OtherState extends State<Other> {
     return Column(
       children: _menuList
         .map((menu) => Card(
+          elevation: 0.5,
+          margin: EdgeInsets.symmetric(vertical: 1.0),
           child: ListTile(
             leading: Icon(
               menu.menuIcon,

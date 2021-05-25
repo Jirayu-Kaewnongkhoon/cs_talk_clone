@@ -16,7 +16,7 @@ class PostList extends StatelessWidget {
           children: postList
             .map((post) => GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/detail', arguments: post);
+                Navigator.pushNamed(context, '/detail', arguments: post.postID);
               },
               child: PostItem(
                 post: post,
