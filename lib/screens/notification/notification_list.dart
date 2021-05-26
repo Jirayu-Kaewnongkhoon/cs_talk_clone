@@ -1,6 +1,7 @@
 import 'package:cstalk_clone/models/notification.dart';
 import 'package:cstalk_clone/models/post.dart';
 import 'package:cstalk_clone/models/user.dart';
+import 'package:cstalk_clone/screens/skeleton/notification_skeleton.dart';
 import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,7 +79,7 @@ class NotificationList extends StatelessWidget {
 
                     }
 
-                    return Container();
+                    return NotificationSkeleton();
                   }
                 );
               }
