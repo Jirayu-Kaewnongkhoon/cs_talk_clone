@@ -2,9 +2,9 @@ import 'package:cstalk_clone/models/menu.dart';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/other/edit_profile.dart';
 import 'package:cstalk_clone/screens/other/post_history.dart';
+import 'package:cstalk_clone/screens/skeleton/profile_skeleton.dart';
 import 'package:cstalk_clone/services/auth_service.dart';
 import 'package:cstalk_clone/services/database_service.dart';
-import 'package:cstalk_clone/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,6 +42,20 @@ class _OtherState extends State<Other> {
 
     final uid = Provider.of<UserObject>(context).uid;
     
+    return Container(
+      child: Column(
+        children: [
+          _profile(uid),
+
+          SizedBox(height: 24.0,),
+
+          Expanded(child: _menu()),
+        ],
+      ),
+    );
+  }
+
+  Widget _profile(String uid) {
     return StreamBuilder<UserData>(
       stream: UserService(uid: uid).userData,
       builder: (context, snapshot) {
@@ -51,48 +65,32 @@ class _OtherState extends State<Other> {
           UserData userData = snapshot.data;
           
           return Container(
+            padding: EdgeInsets.fromLTRB(8.0, 24.0, 8.0, 8.0),
             child: Column(
               children: [
-                _profile(userData),
 
-                SizedBox(height: 24.0,),
+                CircleAvatar(
+                  radius: 45.0,
+                  backgroundImage: userData.imageUrl != null ? NetworkImage(userData.imageUrl) : null,
+                ),
 
-                Expanded(child: _menu()),
+                SizedBox(height: 16.0,),
+
+                Text(
+                  userData.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 19.0,
+                  ),
+                ),
+
               ],
             ),
           );
-
-        } else {
-
-          return Loading();
         }
+
+        return ProfileSkeleton();
       }
-    );
-  }
-
-  Widget _profile(UserData userData) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(8.0, 24.0, 8.0, 8.0),
-      child: Column(
-        children: [
-
-          CircleAvatar(
-            radius: 45.0,
-            backgroundImage: userData.imageUrl != null ? NetworkImage(userData.imageUrl) : null,
-          ),
-
-          SizedBox(height: 16.0,),
-
-          Text(
-            userData.name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 19.0,
-            ),
-          ),
-
-        ],
-      ),
     );
   }
 
