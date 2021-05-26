@@ -21,6 +21,38 @@ class _RegisterState extends State<Register> {
 
   bool isLoading = false;
 
+  void _onRegister() async {
+
+    setState(() => isLoading = true);
+
+    dynamic result = await AuthService()
+      .register(name.trim(), email.trim(), password.trim());
+
+    if (result == null) {
+
+      setState(() => isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.warning,
+                    color: Colors.yellow[600],
+                  ),
+                ),
+                TextSpan(text: ' Authentication failed, Please try again'),
+              ]
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading ? Loading() : Scaffold(
@@ -92,11 +124,7 @@ class _RegisterState extends State<Register> {
                     Expanded(
                       child: ElevatedButton(
                         child: Text('Sign Up'),
-                        onPressed: () async {
-                          setState(() => isLoading = true);
-                          await AuthService().register(name, email, password);
-                          setState(() => isLoading = false);
-                        }, 
+                        onPressed: _onRegister, 
                       ),
                     )
                   ],

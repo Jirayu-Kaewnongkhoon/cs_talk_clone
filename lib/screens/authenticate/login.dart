@@ -20,6 +20,37 @@ class _LoginState extends State<Login> {
 
   bool isLoading = false;
 
+  void _onLogin() async {
+    setState(() => isLoading = true);
+
+    dynamic result = await AuthService()
+      .login(email.trim(), password.trim());
+
+    if (result == null) {
+
+      setState(() => isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.warning,
+                    color: Colors.yellow[600],
+                  ),
+                ),
+                TextSpan(text: ' Authentication failed, Please try again'),
+              ]
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading ? Loading() : Scaffold(
@@ -89,11 +120,7 @@ class _LoginState extends State<Login> {
                     Expanded(
                       child: ElevatedButton(
                         child: Text('Log in'),
-                        onPressed: () async {
-                          setState(() => isLoading = true);
-                          await AuthService().login(email, password);
-                          setState(() => isLoading = false);
-                        }, 
+                        onPressed: _onLogin, 
                       ),
                     )
                   ],
