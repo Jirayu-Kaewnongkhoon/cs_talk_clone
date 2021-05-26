@@ -139,7 +139,9 @@ class PostItem extends StatelessWidget {
               children: [
 
                 ListTile(
-                  leading: CircleAvatar(),
+                  leading: CircleAvatar(
+                    backgroundImage: userData.imageUrl != null ? NetworkImage(userData.imageUrl) : null,
+                  ),
                   title: Text(userData.name),
                   subtitle: Text(_getDateTime(post.timestamp)),
                   trailing: uid != post.ownerID ? null : _popupMenu(context, post),

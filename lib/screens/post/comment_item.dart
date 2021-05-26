@@ -289,7 +289,9 @@ class _CommentItemState extends State<CommentItem> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(),
+                CircleAvatar(
+                  backgroundImage: userData.imageUrl != null ? NetworkImage(userData.imageUrl) : null,
+                ),
 
                 Flexible(
                   flex: 5,

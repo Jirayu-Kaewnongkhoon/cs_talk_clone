@@ -53,7 +53,7 @@ class _OtherState extends State<Other> {
           return Container(
             child: Column(
               children: [
-                _profile(userData.name),
+                _profile(userData),
 
                 SizedBox(height: 24.0,),
 
@@ -70,7 +70,7 @@ class _OtherState extends State<Other> {
     );
   }
 
-  Widget _profile(String name) {
+  Widget _profile(UserData userData) {
     return Container(
       padding: EdgeInsets.fromLTRB(8.0, 24.0, 8.0, 8.0),
       child: Column(
@@ -78,12 +78,13 @@ class _OtherState extends State<Other> {
 
           CircleAvatar(
             radius: 45.0,
+            backgroundImage: userData.imageUrl != null ? NetworkImage(userData.imageUrl) : null,
           ),
 
           SizedBox(height: 16.0,),
 
           Text(
-            name,
+            userData.name,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 19.0,
