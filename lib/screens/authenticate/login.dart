@@ -1,5 +1,6 @@
 import 'package:cstalk_clone/services/auth_service.dart';
 import 'package:cstalk_clone/shared/constants.dart';
+import 'package:cstalk_clone/shared/loading.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -17,9 +18,11 @@ class _LoginState extends State<Login> {
   String email = '';
   String password = '';
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? Loading() : Scaffold(
       body: Padding(
         padding: EdgeInsets.all(40.0),
         child: Form(
@@ -87,7 +90,9 @@ class _LoginState extends State<Login> {
                       child: ElevatedButton(
                         child: Text('Log in'),
                         onPressed: () async {
+                          setState(() => isLoading = true);
                           await AuthService().login(email, password);
+                          setState(() => isLoading = false);
                         }, 
                       ),
                     )
