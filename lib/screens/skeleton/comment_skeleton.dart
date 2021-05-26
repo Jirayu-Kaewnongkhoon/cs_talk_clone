@@ -52,6 +52,7 @@ class CommentSkeleton extends StatelessWidget {
             Container(
               color: Colors.grey[300],
               height: 14.0,
+              width: 150.0,
             ),
 
             SizedBox(height: 4.0),

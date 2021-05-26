@@ -108,11 +108,11 @@ class _EditProfileState extends State<EditProfile> {
                     children: [
 
                       CircleAvatar(
-                        backgroundImage: _image != null ? FileImage(
-                          _image
-                        ) : userData.imageUrl != null ? NetworkImage(
-                          userData.imageUrl
-                        ) : null,
+                        backgroundImage: _image != null 
+                          ? FileImage(_image) 
+                          : userData.imageUrl != null 
+                          ? NetworkImage(userData.imageUrl) 
+                          : null,
                         radius: 75.0,
                       ),
 
