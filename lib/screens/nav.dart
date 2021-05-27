@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cstalk_clone/models/notification.dart';
+import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/home/home.dart';
 import 'package:cstalk_clone/screens/notification/notification.dart';
 import 'package:cstalk_clone/screens/other/other.dart';
 import 'package:cstalk_clone/screens/post/create_post.dart';
 import 'package:cstalk_clone/screens/search/search_post.dart';
+import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+enum NotificationAction { read, unread }
 
 class Nav extends StatefulWidget {
   @override
@@ -11,6 +18,7 @@ class Nav extends StatefulWidget {
 }
 
 class _NavState extends State<Nav> {
+
   int _selectedScreen = 0;
 
   List<Widget> screens = [
@@ -44,6 +52,46 @@ class _NavState extends State<Nav> {
     showSearch(context: context, delegate: SearchPost());
   }
 
+  // void _onMarkAsRead(String uid) async {
+  //   List<NotificationObject> list = await FirebaseFirestore.instance.collection('notifications')
+  //     .doc(uid)
+  //     .collection('items')
+  //     .get()
+  //     .then((value) => value.docs.map((e) => 
+  //       NotificationObject(
+  //         isActivate: e.data()['isActivate'],
+  //         notificationID: e.data()['notificationID'],
+  //       )).toList()
+  //     );
+
+  //   list.forEach((noti) async {
+  //     if (!noti.isActivate) {
+  //       await NotificationService(uid: uid, notificationID: noti.notificationID).updateNotificaionStatus();
+  //     }
+  //   });
+  // }
+
+  // Widget _showPopupMenu() {
+  //   final uid = Provider.of<UserObject>(context).uid;
+    
+  //   return PopupMenuButton<NotificationAction>(
+  //     icon: Icon(Icons.more_vert),
+  //     onSelected: (action) => {action == NotificationAction.read ? _onMarkAsRead(uid) : null},
+  //     itemBuilder: (context) => <PopupMenuEntry<NotificationAction>>[
+
+  //       PopupMenuItem<NotificationAction>(
+  //         value: NotificationAction.read,
+  //         child: Text('Mark all as read'),
+  //       ),
+
+  //       PopupMenuItem<NotificationAction>(
+  //         value: NotificationAction.unread,
+  //         child: Text('.....'),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,17 +99,22 @@ class _NavState extends State<Nav> {
         title: Text(
           'CS TALK',
           style: TextStyle(
-            // color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              // color: Colors.white,
-            ), 
-            onPressed: _showSearch,
+          Visibility(
+            visible: _selectedScreen == 0,
+            child: IconButton(
+              icon: Icon(
+                Icons.search,
+              ), 
+              onPressed: _showSearch,
+            ),
+          ),
+          Visibility(
+            visible: _selectedScreen == 1,
+            child: Text('sssss')/* _showPopupMenu() */,
           )
         ],
       ),
@@ -83,7 +136,21 @@ class _NavState extends State<Nav> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
+            icon: Stack(
+              children: [
+                Icon(Icons.notifications),
+
+                Positioned(
+                  top: 0.0,
+                  right: 0.0,
+                  child: Icon(
+                    Icons.brightness_1, 
+                    color: Colors.redAccent,
+                    size: 8.0, 
+                  ),
+                )
+              ]
+            ),
             label: 'Notification',
           ),
           BottomNavigationBarItem(

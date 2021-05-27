@@ -20,7 +20,7 @@ class PostItem extends StatelessWidget {
     return DateFormat('d MMMM y ').add_jms().format(DateTime.fromMillisecondsSinceEpoch(timestamp));
   }
 
-  void _onPostActionClick(BuildContext context, PostAction action, Post post) {
+  void _onPostActionClick(BuildContext context, PostAction action, Post post) async {
     
     switch (action) {
 
@@ -29,6 +29,7 @@ class PostItem extends StatelessWidget {
         break;
 
       case PostAction.remove :
+        await _showConfirmDialog(context);
         _onRemovePost(context);
         break;
     }
@@ -52,8 +53,6 @@ class PostItem extends StatelessWidget {
   void _onRemovePost(BuildContext context) async {
     await PostService(postID: post.postID).removePost();
 
-    Navigator.pop(context);
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: RichText(
@@ -71,6 +70,45 @@ class PostItem extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showConfirmDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm to remove question?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text('Removed question can\'t be recovered.'),
+                Text('Are you sure you want to continue?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).popUntil(ModalRoute.withName('/'));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

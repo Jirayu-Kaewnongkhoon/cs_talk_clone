@@ -66,11 +66,30 @@ class _EditProfileState extends State<EditProfile> {
         );
 
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.greenAccent[400],
+                ),
+              ),
+              TextSpan(text: ' Your profile has been updated'),
+            ]
+          ),
+        ),
+      ),
+    );
     
     _resetUserData();
   }
 
-  Future<void> _getImage() async {
+  void _getImage() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
     setState(() {

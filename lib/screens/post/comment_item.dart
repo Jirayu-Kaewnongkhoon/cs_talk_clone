@@ -355,7 +355,7 @@ class _CommentItemState extends State<CommentItem> {
     );
   }
 
-  void _popupMenu(BuildContext context) {
+  void _actionMenu(BuildContext context) {
     showModalBottomSheet(
       context: context, 
       builder: (context) {
@@ -407,7 +407,7 @@ class _CommentItemState extends State<CommentItem> {
       children: [
         Expanded(
           child: GestureDetector(
-            onLongPress: uid != widget.comment.ownerID ? null : () => _popupMenu(context),
+            onLongPress: uid != widget.comment.ownerID ? null : () => _actionMenu(context),
             child: Container(
               padding: EdgeInsets.all(8.0),
               decoration: BoxDecoration(
