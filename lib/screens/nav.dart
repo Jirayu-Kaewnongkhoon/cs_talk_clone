@@ -52,45 +52,36 @@ class _NavState extends State<Nav> {
     showSearch(context: context, delegate: SearchPost());
   }
 
-  // void _onMarkAsRead(String uid) async {
-  //   List<NotificationObject> list = await FirebaseFirestore.instance.collection('notifications')
-  //     .doc(uid)
-  //     .collection('items')
-  //     .get()
-  //     .then((value) => value.docs.map((e) => 
-  //       NotificationObject(
-  //         isActivate: e.data()['isActivate'],
-  //         notificationID: e.data()['notificationID'],
-  //       )).toList()
-  //     );
+  void _onMarkAsRead(String uid) async {
+    List<NotificationObject> list = await NotificationService(uid: uid).all;
 
-  //   list.forEach((noti) async {
-  //     if (!noti.isActivate) {
-  //       await NotificationService(uid: uid, notificationID: noti.notificationID).updateNotificaionStatus();
-  //     }
-  //   });
-  // }
+    list.forEach((element) async {
+      if (!element.isActivate) {
+        await NotificationService(uid: uid, notificationID: element.notificationID).updateNotificaionStatus();
+      }
+    });
+  }
 
-  // Widget _showPopupMenu() {
-  //   final uid = Provider.of<UserObject>(context).uid;
+  Widget _showPopupMenu() {
+    final uid = Provider.of<UserObject>(context).uid;
     
-  //   return PopupMenuButton<NotificationAction>(
-  //     icon: Icon(Icons.more_vert),
-  //     onSelected: (action) => {action == NotificationAction.read ? _onMarkAsRead(uid) : null},
-  //     itemBuilder: (context) => <PopupMenuEntry<NotificationAction>>[
+    return PopupMenuButton<NotificationAction>(
+      icon: Icon(Icons.more_vert),
+      onSelected: (action) => {action == NotificationAction.read ? _onMarkAsRead(uid) : null},
+      itemBuilder: (context) => <PopupMenuEntry<NotificationAction>>[
 
-  //       PopupMenuItem<NotificationAction>(
-  //         value: NotificationAction.read,
-  //         child: Text('Mark all as read'),
-  //       ),
+        PopupMenuItem<NotificationAction>(
+          value: NotificationAction.read,
+          child: Text('Mark all as read'),
+        ),
 
-  //       PopupMenuItem<NotificationAction>(
-  //         value: NotificationAction.unread,
-  //         child: Text('.....'),
-  //       ),
-  //     ],
-  //   );
-  // }
+        PopupMenuItem<NotificationAction>(
+          value: NotificationAction.unread,
+          child: Text('.....'), // TODO : more action ???
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +105,7 @@ class _NavState extends State<Nav> {
           ),
           Visibility(
             visible: _selectedScreen == 1,
-            child: Text('sssss')/* _showPopupMenu() */,
+            child: _showPopupMenu(),
           )
         ],
       ),

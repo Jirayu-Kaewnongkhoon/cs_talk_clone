@@ -270,6 +270,14 @@ class NotificationService {
       });
   }
 
+  Future removeNotification() async {
+    return await _collection
+      .doc(uid)
+      .collection('items')
+      .doc(notificationID)
+      .delete();
+  }
+
   List<NotificationObject> _notificationsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) => NotificationObject(
       notificationID: doc.data()['notificationID'],
@@ -288,5 +296,22 @@ class NotificationService {
       .orderBy('timestamp', descending: true)
       .snapshots()
       .map(_notificationsFromSnapshot);
+  }
+
+  Future<List<NotificationObject>> get notificationsByPostID async {
+    return await _collection
+      .doc(uid)
+      .collection('items')
+      .where('postID', isEqualTo: postID)
+      .get()
+      .then((snapshot) => _notificationsFromSnapshot(snapshot));
+  }
+
+  Future<List<NotificationObject>> get all async {
+    return await _collection
+      .doc(uid)
+      .collection('items')
+      .get()
+      .then((snapshot) => _notificationsFromSnapshot(snapshot));
   }
 }

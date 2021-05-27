@@ -1,3 +1,4 @@
+import 'package:cstalk_clone/models/notification.dart';
 import 'package:cstalk_clone/models/post.dart';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/post/create_post.dart';
@@ -20,7 +21,7 @@ class PostItem extends StatelessWidget {
     return DateFormat('d MMMM y ').add_jms().format(DateTime.fromMillisecondsSinceEpoch(timestamp));
   }
 
-  void _onPostActionClick(BuildContext context, PostAction action, Post post) async {
+  void _onPostActionClick(BuildContext context, PostAction action, Post post, String uid) async {
     
     switch (action) {
 
@@ -30,7 +31,7 @@ class PostItem extends StatelessWidget {
 
       case PostAction.remove :
         await _showConfirmDialog(context);
-        _onRemovePost(context);
+        _onRemovePost(context, uid);
         break;
     }
   }
@@ -50,8 +51,10 @@ class PostItem extends StatelessWidget {
     );
   }
 
-  void _onRemovePost(BuildContext context) async {
+  void _onRemovePost(BuildContext context, String uid) async {
     await PostService(postID: post.postID).removePost();
+
+    _removeNotification(uid);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -71,6 +74,15 @@ class PostItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _removeNotification(String uid) async{
+    List<NotificationObject> list = await NotificationService(uid: uid, postID: post.postID).notificationsByPostID;
+
+    list.forEach((element) async {
+      print(element.notificationID);
+      await NotificationService(uid: uid, notificationID: element.notificationID).removeNotification();
+    });
   }
 
   Future<void> _showConfirmDialog(BuildContext context) async {
@@ -140,10 +152,10 @@ class PostItem extends StatelessWidget {
     );
   }
 
-  Widget _popupMenu(BuildContext context, Post post) {
+  Widget _popupMenu(BuildContext context, Post post, String uid) {
     return PopupMenuButton<PostAction>(
       icon: Icon(Icons.more_horiz),
-      onSelected: (action) => _onPostActionClick(context, action, post),
+      onSelected: (action) => _onPostActionClick(context, action, post, uid),
       itemBuilder: (context) => <PopupMenuEntry<PostAction>>[
 
         PopupMenuItem<PostAction>(
@@ -182,7 +194,7 @@ class PostItem extends StatelessWidget {
                   ),
                   title: Text(userData.name),
                   subtitle: Text(_getDateTime(post.timestamp)),
-                  trailing: uid != post.ownerID ? null : _popupMenu(context, post),
+                  trailing: uid != post.ownerID ? null : _popupMenu(context, post, uid),
                 ),
 
                 Padding(
