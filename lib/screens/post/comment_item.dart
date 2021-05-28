@@ -174,10 +174,14 @@ class _CommentItemState extends State<CommentItem> {
       
       commentID = widget.comment.commentID;
 
-      await NotificationService(
-        uid: widget.comment.ownerID,
-        postID: widget.comment.postID,
-      ).createNotificaion('accept', uid);
+      if (uid != widget.comment.ownerID) {
+
+        await NotificationService(
+          uid: widget.comment.ownerID,
+          postID: widget.comment.postID,
+        ).createNotificaion('accept', uid);
+
+      }
 
     } 
 
