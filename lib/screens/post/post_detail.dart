@@ -230,8 +230,18 @@ class _PostDetailState extends State<PostDetail> {
         }
 
         return Scaffold(
+          appBar: AppBar(
+            title: Text('Question not found'),
+          ),
           body: Center(
-            child: Text('This question is no longer available'),
+            child: Text(
+              'This question is no longer available',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey[400],
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         );
       }

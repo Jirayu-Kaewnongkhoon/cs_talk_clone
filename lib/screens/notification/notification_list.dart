@@ -79,6 +79,8 @@ class NotificationList extends StatelessWidget {
 
                     }
 
+                    // ถ้า post ถูกลบ หรือ user ไม่มีข้อมูล
+                    // จะไม่แสดง notification
                     if (!postSnapshot.hasData || !userSnapshot.hasData) {
                       
                       return Container();
