@@ -12,6 +12,28 @@ class NotificationList extends StatelessWidget {
 
     final notificationList = Provider.of<List<NotificationObject>>(context) ?? [];
     final uid = Provider.of<UserObject>(context).uid;
+
+    // if (notificationList.length == 0) {
+    //   return Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Icon(
+    //           Icons.notifications, 
+    //           size: 85.0, 
+    //           color: Colors.grey[350],
+    //         ),
+    //         Text(
+    //           'No notifications received',
+    //           style: TextStyle(
+    //             color: Colors.grey,
+    //             fontWeight: FontWeight.w600
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
     
     return ListView.builder(
       itemCount: notificationList.length,

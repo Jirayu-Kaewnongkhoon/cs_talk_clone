@@ -9,6 +9,28 @@ class PostList extends StatelessWidget {
 
     final postList = Provider.of<List<Post>>(context) ?? [];
 
+    // if (postList.isEmpty) {
+    //   return Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Icon(
+    //           Icons.question_answer, 
+    //           size: 85.0, 
+    //           color: Colors.grey[350],
+    //         ),
+    //         Text(
+    //           'No questions founded',
+    //           style: TextStyle(
+    //             color: Colors.grey,
+    //             fontWeight: FontWeight.w600
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
       child: SingleChildScrollView(

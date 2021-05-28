@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cstalk_clone/models/notification.dart';
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/home/home.dart';
@@ -10,7 +9,7 @@ import 'package:cstalk_clone/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum NotificationAction { read, unread }
+enum NotificationAction { read, clear }
 
 class Nav extends StatefulWidget {
   @override
@@ -62,12 +61,22 @@ class _NavState extends State<Nav> {
     });
   }
 
+  void _onClearNotification(String uid) async {
+
+    List<NotificationObject> list = await NotificationService(uid: uid).all;
+
+    list.forEach((element) async {
+      await NotificationService(uid: uid, notificationID: element.notificationID).removeNotification();
+    });
+    
+  }
+
   Widget _showPopupMenu() {
     final uid = Provider.of<UserObject>(context).uid;
     
     return PopupMenuButton<NotificationAction>(
       icon: Icon(Icons.more_vert),
-      onSelected: (action) => {action == NotificationAction.read ? _onMarkAsRead(uid) : null},
+      onSelected: (action) => {action == NotificationAction.read ? _onMarkAsRead(uid) : _onClearNotification(uid)},
       itemBuilder: (context) => <PopupMenuEntry<NotificationAction>>[
 
         PopupMenuItem<NotificationAction>(
@@ -76,8 +85,8 @@ class _NavState extends State<Nav> {
         ),
 
         PopupMenuItem<NotificationAction>(
-          value: NotificationAction.unread,
-          child: Text('.....'), // TODO : more action ???
+          value: NotificationAction.clear,
+          child: Text('Clear all notification'),
         ),
       ],
     );
@@ -127,21 +136,7 @@ class _NavState extends State<Nav> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Stack(
-              children: [
-                Icon(Icons.notifications),
-
-                Positioned(
-                  top: 0.0,
-                  right: 0.0,
-                  child: Icon(
-                    Icons.brightness_1, 
-                    color: Colors.redAccent,
-                    size: 8.0, 
-                  ),
-                )
-              ]
-            ),
+            icon: Icon(Icons.notifications),
             label: 'Notification',
           ),
           BottomNavigationBarItem(
