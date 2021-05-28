@@ -271,6 +271,45 @@ class _CommentItemState extends State<CommentItem> {
     );
   }
 
+  Future<void> _showConfirmDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm to remove question?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text('Removed question can\'t be recovered.'),
+                Text('Are you sure you want to continue?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -390,7 +429,10 @@ class _CommentItemState extends State<CommentItem> {
                   color: Colors.orangeAccent,
                 ), 
                 title: Text('Remove'), 
-                onTap: () => _onRemoveComment(context),
+                onTap: () async {
+                  await _showConfirmDialog();
+                  _onRemoveComment(context);
+                }
               ),
             ],
           ),
