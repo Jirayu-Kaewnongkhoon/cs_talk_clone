@@ -54,7 +54,7 @@ class PostItem extends StatelessWidget {
   void _onRemovePost(BuildContext context, String uid) async {
     await PostService(postID: post.postID).removePost();
 
-    _removeNotification(uid);
+    // _removeNotification(uid);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

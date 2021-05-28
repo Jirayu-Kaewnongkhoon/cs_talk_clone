@@ -79,6 +79,11 @@ class NotificationList extends StatelessWidget {
 
                     }
 
+                    if (!postSnapshot.hasData || !userSnapshot.hasData) {
+                      
+                      return Container();
+                    }
+
                     return NotificationSkeleton();
                   }
                 );
