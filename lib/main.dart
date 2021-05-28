@@ -1,6 +1,7 @@
 import 'package:cstalk_clone/models/user.dart';
 import 'package:cstalk_clone/screens/home/post_filter.dart';
 import 'package:cstalk_clone/screens/nav.dart';
+import 'package:cstalk_clone/screens/post/image_preview.dart';
 import 'package:cstalk_clone/screens/post/post_detail.dart';
 import 'package:cstalk_clone/screens/wrapper.dart';
 import 'package:cstalk_clone/services/auth_service.dart';
@@ -32,6 +33,7 @@ class App extends StatelessWidget {
           '/home': (context) => Nav(),
           '/detail': (context) => PostDetail(),
           '/filter': (context) => PostFilter(),
+          '/image': (context) => ImagePreview(),
         },
       ),
     );
