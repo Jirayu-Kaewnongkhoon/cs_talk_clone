@@ -15,7 +15,7 @@ class UserService {
   Future updateUserData({ String name, String imageUrl }) async {
     return await _collection
       .doc(uid)
-      .update({
+      .set({
         'uid': uid,
         'name': name,
         'imageUrl': imageUrl,

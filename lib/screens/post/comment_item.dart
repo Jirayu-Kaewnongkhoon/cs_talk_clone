@@ -555,9 +555,9 @@ class _CommentItemState extends State<CommentItem> {
       if (widget.comment.imageUrl != null) {
 
         return GestureDetector(
-          onTap: () => Navigator.pushNamed(context, '/image', arguments: Image.network(widget.comment.imageUrl)),
+          onTap: () => Navigator.pushNamed(context, '/image', arguments: widget.comment.imageUrl),
           child: Hero(
-            tag: 'photo',
+            tag: widget.comment.imageUrl,
             child: Image.network(widget.comment.imageUrl),
           ),
         );

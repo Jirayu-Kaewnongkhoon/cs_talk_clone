@@ -209,9 +209,9 @@ class PostItem extends StatelessWidget {
 
                       post.imageUrl != null 
                       ? GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/image', arguments: Image.network(post.imageUrl)),
+                          onTap: () => Navigator.pushNamed(context, '/image', arguments: post.imageUrl),
                           child: Hero(
-                            tag: 'photo',
+                            tag: post.imageUrl,
                             child: Image.network(post.imageUrl),
                           ),
                       ) 
