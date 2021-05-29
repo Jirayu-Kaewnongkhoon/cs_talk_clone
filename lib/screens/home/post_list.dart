@@ -54,8 +54,9 @@ class _PostListState extends State<PostList> {
     //   );
     // }
 
-    return Padding(
+    return Container(
       padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+      width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -91,22 +92,6 @@ class _PostListState extends State<PostList> {
             )).toList(),
           ),
         ),
-      // child: ListView.builder(
-      //   itemCount: postList.length,
-      //   itemBuilder: (context, index) {
-          
-      //     Post post = postList[index];
-
-      //     return GestureDetector(
-      //       onTap: () {
-      //         Navigator.pushNamed(context, '/detail', arguments: post);
-      //       },
-      //       child: PostItem(
-      //         post: post,
-      //       ),
-      //     );
-      //   },
-      // ),
       )
     );
   }
