@@ -30,8 +30,7 @@ class PostItem extends StatelessWidget {
         break;
 
       case PostAction.remove :
-        await _showConfirmDialog(context);
-        _onRemovePost(context, uid);
+        await _showConfirmDialog(context, uid);
         break;
     }
   }
@@ -85,7 +84,7 @@ class PostItem extends StatelessWidget {
     });
   }
 
-  Future<void> _showConfirmDialog(BuildContext context) async {
+  Future<void> _showConfirmDialog(BuildContext context, String uid) async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -116,6 +115,7 @@ class PostItem extends StatelessWidget {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                _onRemovePost(context, uid);
               },
             ),
           ],
